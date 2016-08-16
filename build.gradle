@@ -1,0 +1,55 @@
+group 'api'
+version '1.0'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE'
+        classpath 'org.springframework:springloaded:1.2.6.RELEASE'
+
+    }
+}
+
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+apply plugin: 'idea'
+// apply plugin: 'war'
+
+sourceCompatibility = 1.8
+
+jar {
+    baseName = 'app'
+    version =  ''
+}
+
+bootRepackage.withJarTask = jar
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+configurations {
+    providedRuntime
+}
+
+dependencies {
+    compile 'mysql:mysql-connector-java:5.1.38'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'org.apache.tomcat:tomcat-jdbc:8.0.32'
+    compile 'com.google.guava:guava:19.0'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'redis.clients:jedis:2.8.0'
+    compile 'com.google.guava:guava:19.0'
+    compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
+    compile 'org.springframework.data:spring-data-redis:1.7.2.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web:1.4.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.4.0.RELEASE'
+
+    compile group: 'org.mybatis.generator', name: 'mybatis-generator', version: '1.3.3', ext: 'pom'
+
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:1.4.0.RELEASE")
+}

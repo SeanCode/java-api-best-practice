@@ -1,0 +1,95 @@
+package com.dix.interceptor;
+
+import com.dix.common.Config;
+import com.dix.exception.NotExistsException;
+import com.dix.exception.ParamNotSetException;
+import com.dix.exception.TokenInvalidException;
+import com.dix.model.Token;
+import com.dix.service.TokenService;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
+
+/**
+ * Created by dd on 9/8/15.
+ */
+@Component
+public class SecurityInterceptor implements HandlerInterceptor
+{
+    private static Logger logger = org.slf4j.LoggerFactory.getLogger(SecurityInterceptor.class);
+
+    @Autowired
+    private TokenService tokenService;
+
+    private boolean canGuestAccess(String path)
+    {
+        for (int i = 0; i < Config.PATH_GUEST_CAN_ACCESS.length; i++)
+        {
+            if (Config.PATH_GUEST_CAN_ACCESS[i].equals(path))
+            {
+                return  true;
+            }
+        }
+
+        return false;
+    }
+
+    private String getRequiredParam(HttpServletRequest httpServletRequest, String key) throws ParamNotSetException {
+        if (!httpServletRequest.getParameterMap().containsKey(key))
+        {
+            throw new ParamNotSetException(key);
+        }
+
+        return httpServletRequest.getParameter(key);
+    }
+
+    @Override
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception
+    {
+        URI uri = new URI(httpServletRequest.getRequestURI());
+        String path = uri.getPath().substring(1);
+
+        httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+
+        logger.trace(String.format("path: %s", path));
+
+        if (!canGuestAccess(path))
+        {
+            String token = getRequiredParam(httpServletRequest, "token");
+            Token tokenEntity = tokenService.getToken(token);
+
+            if (token == null || tokenEntity == null)
+            {
+                throw new TokenInvalidException();
+            }
+
+            httpServletRequest.setAttribute("userId", tokenEntity.getUserId());
+        }
+
+        // httpServletRequest.setAttribute("client", getRequiredParam(httpServletRequest, "client"));
+        // httpServletRequest.setAttribute("version", getRequiredParam(httpServletRequest, "version"));
+
+        return true;
+    }
+
+
+
+
+    @Override
+    public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception
+    {
+
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception
+    {
+
+    }
+}

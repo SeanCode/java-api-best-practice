@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+       Copyright 2015-2016 the original author or authors.
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dix.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="User">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="tel" jdbcType="VARCHAR" property="tel" />
+        <result column="gender" jdbcType="INTEGER" property="gender" />
+        <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+        <result column="birthday" jdbcType="INTEGER" property="birthday" />
+        <result column="source_id" jdbcType="INTEGER" property="sourceId" />
+        <result column="source_type" jdbcType="INTEGER" property="sourceType" />
+        <result column="source_client" jdbcType="INTEGER" property="sourceClient" />
+        <result column="weight" jdbcType="INTEGER" property="weight" />
+        <result column="create_time" jdbcType="BIGINT" property="createTime" />
+        <result column="update_time" jdbcType="BIGINT" property="updateTime" />
+    </resultMap>
+
+    <select id="existsByName" resultMap="UserResultMap">
+        select * from user where name = #{name} and weight >= 0 limit 0, 1
+    </select>
+
+    <select id="existsByEmail" resultMap="UserResultMap">
+        select * from user where email = #{email} and weight >= 0 limit 0, 1
+    </select>
+
+    <select id="existsByUserName" resultMap="UserResultMap">
+        select * from user where username = #{username} and weight >= 0 limit 0, 1
+    </select>
+
+    <select id="existsByPhone" resultMap="UserResultMap">
+        select * from user where phone = #{phone} and weight >= 0 limit 0, 1
+    </select>
+
+    <select id="existsByUidIgnoreCase" resultMap="UserResultMap">
+        select * from user where lower(uid) = lower(#{uid}) and weight >= 0 limit 0, 1
+    </select>
+
+    <select id="getUserByOuterUserId" resultMap="UserResultMap">
+        select t1.* from user as t1, user_bind as t2
+        where t1.id = t2.user_id
+              and t2.type = #{type}
+              and t2.outer_user_id = #{outer_user_id}
+              and t2.weight >= 0 limit 0, 1
+    </select>
+
+    <select id="getUserCount" resultType="Integer">
+        select count(*) from user where weight >= 0
+    </select>
+
+    <select id="getUserList" resultType="Map">
+        select * from user where weight >= 0 order by create_time DESC limit #{limit} offset #{offset}
+    </select>
+
+    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        insert into user (uid, username,
+                          phone, password, email, name, tel,
+                          gender, avatar, birthday, source_id,
+                          source_type, source_client, weight,
+                          create_time, update_time)
+        values (#{uid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+                                         #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+                                         #{name,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER},
+                                         #{avatar,jdbcType=VARCHAR}, #{birthday,jdbcType=INTEGER}, #{sourceId,jdbcType=INTEGER},
+                #{sourceType,jdbcType=INTEGER}, #{sourceClient,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER},
+                #{createTime,jdbcType=BIGINT}, #{updateTime,jdbcType=BIGINT})
+    </insert>
+
+    <update id="update" parameterType="User">
+        update user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="sourceId != null">source_id = #{sourceId},</if>
+            <if test="sourceType != null">source_type = #{sourceType},</if>
+            <if test="sourceClient != null">source_client = #{sourceClient},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findById" resultMap="UserResultMap">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="getSomeUsers" resultType="Map">
+        select * from user limit 0, 10
+    </select>
+
+    <select id="getSomeUsersByQuery" resultType="Map">
+        select * from user
+
+        <where>
+            <if test="userIdList != null">
+                id in
+                <foreach item="item" index="index" collection="userIdList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+
+        limit 0, 10
+    </select>
+
+    <select id="existsById" resultMap="UserResultMap">
+        select * from user where id = #{user_id} and weight >= 0 limit 0, 1
+    </select>
+
+    <select id="getUserByUid" resultMap="UserResultMap">
+        select * from user where uid = #{uid} and weight >= 0 limit 0, 1
+    </select>
+
+</mapper>
