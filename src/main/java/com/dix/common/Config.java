@@ -1,13 +1,13 @@
 package com.dix.common;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by dd on 9/8/15.
  */
 public class Config {
-    public static final String[] PATH_GUEST_CAN_ACCESS = new String[]{
-            "client/1/org/test",
-            "client/1/user/login",
-            "client/1/user/register",
-            "client/1/user/password-reset",
+    public static final Pattern[] PATH_GUEST_CAN_ACCESS_PATTERN = new Pattern[]{
+            Pattern.compile("^/client/1/user/(login|register|password-reset)"),
+            Pattern.compile("^/test/.*")
     };
 }

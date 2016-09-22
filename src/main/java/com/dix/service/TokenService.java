@@ -20,11 +20,15 @@ public class TokenService {
 
     private static Logger logger = LoggerFactory.getLogger(TokenService.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    private final TokenMapper tokenMapper;
 
     @Autowired
-    private TokenMapper tokenMapper;
+    public TokenService(TokenMapper tokenMapper, UserService userService) {
+        this.tokenMapper = tokenMapper;
+        this.userService = userService;
+    }
 
     public Token getToken(String token)
     {

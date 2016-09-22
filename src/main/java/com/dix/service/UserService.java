@@ -13,9 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -31,15 +33,18 @@ public class UserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
+
+    private final UserBindMapper userBindMapper;
+
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    private UserBindMapper userBindMapper;
-
-
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    public UserService(UserBindMapper userBindMapper, @Qualifier("RedisTemplate") RedisTemplate<String, String> redisTemplate, UserMapper userMapper) {
+        this.userBindMapper = userBindMapper;
+        this.redisTemplate = redisTemplate;
+        this.userMapper = userMapper;
+    }
 
     public User loginByPhone(String phone, String password) throws InvalidKeySpecException, NoSuchAlgorithmException, LoginFailException {
         User user = userMapper.existsByPhone(phone);
@@ -397,6 +402,18 @@ public class UserService {
             return null;
         }
         return user.processModel();
+    }
+
+    @Transactional
+    public void testTransaction()
+    {
+        User user = new User();
+        user.setUid("-x");
+        user.setUsername("dd");
+        user.save();
+
+        // throw new NotAllowedException();
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
     }
 
 }

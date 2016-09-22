@@ -1,7 +1,6 @@
 package com.dix.interceptor;
 
 import com.dix.common.Config;
-import com.dix.exception.NotExistsException;
 import com.dix.exception.ParamNotSetException;
 import com.dix.exception.TokenInvalidException;
 import com.dix.model.Token;
@@ -24,16 +23,20 @@ public class SecurityInterceptor implements HandlerInterceptor
 {
     private static Logger logger = org.slf4j.LoggerFactory.getLogger(SecurityInterceptor.class);
 
+    private final TokenService tokenService;
+
     @Autowired
-    private TokenService tokenService;
+    public SecurityInterceptor(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     private boolean canGuestAccess(String path)
     {
-        for (int i = 0; i < Config.PATH_GUEST_CAN_ACCESS.length; i++)
+        for (int i = 0; i < Config.PATH_GUEST_CAN_ACCESS_PATTERN.length; i++)
         {
-            if (Config.PATH_GUEST_CAN_ACCESS[i].equals(path))
+            if (Config.PATH_GUEST_CAN_ACCESS_PATTERN[i].matcher(path).matches())
             {
-                return  true;
+                return true;
             }
         }
 
@@ -53,11 +56,12 @@ public class SecurityInterceptor implements HandlerInterceptor
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception
     {
         URI uri = new URI(httpServletRequest.getRequestURI());
-        String path = uri.getPath().substring(1);
+        String path = uri.getPath();
 
         httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
 
         logger.trace(String.format("path: %s", path));
+        System.out.println(String.format("path: %s", path));
 
         if (!canGuestAccess(path))
         {

@@ -16,6 +16,12 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    public UserController(@Qualifier("RedisTemplate") RedisTemplate<String, String> template, UserService userService) {
+        this.template = template;
+        this.userService = userService;
+    }
+
     @RequestMapping("/mapper-user")
     public Map getUserByMapper() {
         try {
@@ -54,11 +60,9 @@ public class UserController {
         return template.boundValueOps(key).get();
     }
 
-    @Autowired
-    @Qualifier("RedisTemplate")
-    private RedisTemplate<String, String> template;
 
-    @Autowired
-    private UserService userService;
+    private final RedisTemplate<String, String> template;
+
+    private final UserService userService;
 
 }

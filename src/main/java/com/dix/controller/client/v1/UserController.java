@@ -25,6 +25,19 @@ import java.util.List;
 @Component
 public class UserController {
 
+    private final UserService userService;
+
+    private final TokenService tokenService;
+
+    private final HttpServletRequest request;
+
+    @Autowired
+    public UserController(HttpServletRequest request, TokenService tokenService, UserService userService) {
+        this.request = request;
+        this.tokenService = tokenService;
+        this.userService = userService;
+    }
+
     @RequestMapping("/login")
     public DataResponse login(@RequestParam("phone") String phone, @RequestParam("password") String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
@@ -60,13 +73,4 @@ public class UserController {
         return DataResponse.create()
                 .put("user", user.processModel());
     }
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private HttpServletRequest request;
 }
