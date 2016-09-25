@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by dd on 9/7/15.
  */
 @Component
-@Transactional
 public class TokenService {
 
     private static Logger logger = LoggerFactory.getLogger(TokenService.class);

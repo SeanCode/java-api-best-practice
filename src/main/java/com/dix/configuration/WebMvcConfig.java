@@ -9,11 +9,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
+  private final SecurityInterceptor securityInterceptor;
+
   @Autowired
-  SecurityInterceptor securityInterceptor;
+  public WebMvcConfig(SecurityInterceptor securityInterceptor) {
+    this.securityInterceptor = securityInterceptor;
+  }
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-      registry.addInterceptor(securityInterceptor).addPathPatterns("/**");
+      registry.addInterceptor(securityInterceptor)
+              .addPathPatterns("/**")
+              .excludePathPatterns("/error**")
+              .excludePathPatterns("/static/**")
+      ;
   }
 }

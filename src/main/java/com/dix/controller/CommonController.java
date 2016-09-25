@@ -3,13 +3,19 @@ package com.dix.controller;
 import com.dix.common.DataResponse;
 import com.dix.common.ErrorResponse;
 import com.dix.exception.BaseException;
+import com.dix.service.TokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by dd on 9/7/15.
@@ -17,12 +23,28 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class CommonController implements ErrorController
 {
+    private static Logger logger = LoggerFactory.getLogger(CommonController.class);
     private static final String PATH_ERROR = "/error";
 
     @RequestMapping(PATH_ERROR)
-    public ErrorResponse error(HttpServletRequest request)
+    public ErrorResponse error(HttpServletRequest request, HttpServletResponse response, Exception e)
     {
-        return new ErrorResponse(BaseException.ERROR, "an error occurred");
+        logger.info("request path: {} {}, status: {}", request.getRequestURI(), request.getQueryString(), response.getStatus());
+
+        String message = "an error occurred";
+
+        switch (response.getStatus())
+        {
+            case 404:
+                message = "not found";
+                break;
+
+            case 500:
+                message = "inner server error";
+                break;
+        }
+
+        return new ErrorResponse(BaseException.ERROR, message);
     }
 
 
