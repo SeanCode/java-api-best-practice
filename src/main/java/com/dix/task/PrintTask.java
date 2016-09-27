@@ -19,4 +19,16 @@ public class PrintTask {
     public void reportCurrentTime() {
         log.info("The time is now {}", dateFormat.format(new Date()));
     }
+
+    @Scheduled(fixedDelay = 5000)
+    public void print() {
+        try {
+            Thread.sleep(2000);
+        }
+        catch (Exception e)
+        {
+
+        }
+        log.info("hello {}", dateFormat.format(new Date()));
+    }
 }
