@@ -11,8 +11,12 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class ContextConfig {
 
+    private final ApplicationContext context;
+
     @Autowired
-    ApplicationContext context;
+    public ContextConfig(ApplicationContext context) {
+        this.context = context;
+    }
 
     @PostConstruct
     private void init()

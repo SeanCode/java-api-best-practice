@@ -28,7 +28,7 @@ public class TestController {
 
     @RequestMapping("/transaction")
     public DataResponse transaction() {
-        userService.testTransaction();
+        // userService.testTransaction();
         return DataResponse.create();
     }
 

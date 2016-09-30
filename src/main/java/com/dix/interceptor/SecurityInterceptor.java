@@ -58,7 +58,8 @@ public class SecurityInterceptor implements HandlerInterceptor
         URI uri = new URI(httpServletRequest.getRequestURI());
         String path = uri.getPath();
 
-        httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+        // use default cors
+        // httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
 
         logger.trace(String.format("path: %s", path));
         System.out.println(String.format("path: %s", path));

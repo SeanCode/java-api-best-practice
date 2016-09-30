@@ -9,6 +9,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -19,8 +20,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     public WebMvcConfig(SecurityInterceptor securityInterceptor) {
-    this.securityInterceptor = securityInterceptor;
-  }
+        this.securityInterceptor = securityInterceptor;
+      }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -38,10 +39,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
-        config.addAllowedMethod("GET");
-        config.addAllowedMethod("HEAD");
-        config.addAllowedMethod("POST");
-        config.addAllowedMethod("OPTIONS");
+        config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(0);

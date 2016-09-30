@@ -15,12 +15,12 @@ public class PrintTask {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000000)
     public void reportCurrentTime() {
         log.info("The time is now {}", dateFormat.format(new Date()));
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 50000000)
     public void print() {
         try {
             Thread.sleep(2000);
