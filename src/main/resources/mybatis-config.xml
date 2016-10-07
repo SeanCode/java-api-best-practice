@@ -16,7 +16,7 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <package name="com.dix.model"/>
+        <package name="com.dix.app.model"/>
     </typeAliases>
     <!--<objectFactory type="com.dixn.SpringMybatisObjectFactory">-->
     <!--</objectFactory>-->
