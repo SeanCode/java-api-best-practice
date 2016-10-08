@@ -1,6 +1,6 @@
 package com.dix.base.interceptor;
 
-import com.dix.base.common.Config;
+import com.dix.base.common.CoreConfig;
 import com.dix.base.common.Const;
 import com.dix.base.common.Util;
 import com.dix.base.exception.InvalidConfigurationException;
@@ -39,15 +39,9 @@ public class SecurityInterceptor implements HandlerInterceptor
 
     private boolean canGuestAccess(String path)
     {
-        for (int i = 0; i < Config.PATH_GUEST_CAN_ACCESS_PATTERN.length; i++)
-        {
-            if (Config.PATH_GUEST_CAN_ACCESS_PATTERN[i].matcher(path).matches())
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return CoreConfig.getInstance().getGuestCanAccessPathPatternList()
+                .stream()
+                .anyMatch(p -> p.matcher(path).matches());
     }
 
     private String getRequiredParam(HttpServletRequest httpServletRequest, String key) throws ParamNotSetException {

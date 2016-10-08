@@ -1,5 +1,8 @@
 package com.dix.app;
 
+import com.dix.app.common.Config;
+import com.dix.base.common.CoreConfig;
+import com.google.common.collect.Lists;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,6 +19,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class BootApplication {
 
     public static void main(String[] args) throws Exception {
+
+        CoreConfig.getInstance().addToGuestCanAccessPathPatternList(Lists.newArrayList(Config.PATH_GUEST_CAN_ACCESS_PATTERN));
+
         SpringApplication.run(BootApplication.class, args);
     }
 }
