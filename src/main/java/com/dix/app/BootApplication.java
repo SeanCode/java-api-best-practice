@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @PropertySource("classpath:application.properties")
 @ComponentScan
+@ComponentScan(basePackages = "com.dix.base")
 @EnableScheduling
 public class BootApplication {
 

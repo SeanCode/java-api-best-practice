@@ -39,6 +39,16 @@ public class Util {
 
     public static int parseInt(Object obj)
     {
+        if (obj instanceof Long)
+        {
+            return ((Long) obj).intValue();
+        }
+
+        if (obj instanceof Integer)
+        {
+            return (Integer)obj;
+        }
+
         try
         {
             return (int)Double.parseDouble("" + obj);
@@ -53,6 +63,16 @@ public class Util {
 
     public static long parseLong(Object obj)
     {
+        if (obj instanceof Long)
+        {
+            return (Long) obj;
+        }
+
+        if (obj instanceof Integer)
+        {
+            return ((Integer)obj).longValue();
+        }
+
         try
         {
             return (long)Double.parseDouble("" + obj);
@@ -61,7 +81,8 @@ public class Util {
         {
             logger.error("parse long error: {}, source: \n{}", e.getMessage(), obj);
         }
-        return 0;
+
+        return 0L;
     }
 
     public static String generateRandomString(int length)

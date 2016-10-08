@@ -1,10 +1,11 @@
 package com.dix.base.interceptor;
 
 import com.dix.base.common.Config;
+import com.dix.base.common.Const;
+import com.dix.base.common.Util;
+import com.dix.base.exception.InvalidConfigurationException;
 import com.dix.base.exception.ParamNotSetException;
 import com.dix.base.exception.TokenInvalidException;
-import com.dix.app.model.Token;
-import com.dix.app.service.TokenService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
+import java.util.Map;
 
 /**
  * Created by dd on 9/8/15.
@@ -23,11 +25,16 @@ public class SecurityInterceptor implements HandlerInterceptor
 {
     private static Logger logger = org.slf4j.LoggerFactory.getLogger(SecurityInterceptor.class);
 
-    private final TokenService tokenService;
+    private final UserAuth userAuth;
 
     @Autowired
-    public SecurityInterceptor(TokenService tokenService) {
-        this.tokenService = tokenService;
+    public SecurityInterceptor(UserAuth userAuth) {
+        this.userAuth = userAuth;
+
+        if (this.userAuth == null)
+        {
+            throw new InvalidConfigurationException("UserAuth not found");
+        }
     }
 
     private boolean canGuestAccess(String path)
@@ -67,14 +74,16 @@ public class SecurityInterceptor implements HandlerInterceptor
         if (!canGuestAccess(path))
         {
             String token = getRequiredParam(httpServletRequest, "token");
-            Token tokenEntity = tokenService.getToken(token);
+            Map user = userAuth.getUserByToken(token);
 
-            if (token == null || tokenEntity == null)
+            if (user == null || !user.containsKey(Const.USER_AUTH_KEY_USER_ID))
             {
                 throw new TokenInvalidException();
             }
 
-            httpServletRequest.setAttribute("userId", tokenEntity.getUserId());
+            Long userId = Util.parseLong(user.get(Const.USER_AUTH_KEY_USER_ID));
+
+            httpServletRequest.setAttribute(Const.USER_AUTH_KEY_USER_ID, userId);
         }
 
         // httpServletRequest.setAttribute("client", getRequiredParam(httpServletRequest, "client"));
@@ -96,5 +105,10 @@ public class SecurityInterceptor implements HandlerInterceptor
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception
     {
 
+    }
+
+    public interface UserAuth
+    {
+        Map<String, Object> getUserByToken(String token);
     }
 }

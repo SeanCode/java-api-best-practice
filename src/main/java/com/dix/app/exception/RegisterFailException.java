@@ -1,9 +1,9 @@
-package com.dix.base.exception;
+package com.dix.app.exception;
 
 /**
  * Created by dd on 1/27/16.
  */
-public class RegisterFailException extends BaseException {
+public class RegisterFailException extends AppBaseException {
     public RegisterFailException() {
         super(ERROR_REGISTER, "register fail");
     }

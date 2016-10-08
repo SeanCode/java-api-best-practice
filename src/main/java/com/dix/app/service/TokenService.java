@@ -1,7 +1,7 @@
 package com.dix.app.service;
 
 import com.dix.base.common.Util;
-import com.dix.base.exception.UserNotExistsException;
+import com.dix.app.exception.UserNotExistsException;
 import com.dix.app.mapper.TokenMapper;
 import com.dix.app.model.Token;
 import com.dix.app.model.User;
