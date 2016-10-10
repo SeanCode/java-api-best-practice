@@ -160,11 +160,11 @@ public class Util {
         return gson.toJson(object);
     }
 
-    public static Object jsonDecode(String jsonString, Type type)
+    public static <T> T jsonDecode(String jsonString, Type type)
     {
         if (jsonString == null) return null;
 
-        Object object = null;
+        T object = null;
         try
         {
             object = gson.fromJson(jsonString, type);
