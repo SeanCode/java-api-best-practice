@@ -89,8 +89,6 @@ public class Core {
             map = objectMapper.convertValue(model, Map.class);
         }
 
-        System.out.println(map);
-
         LinkedHashMap<String, Object> resultMap = new LinkedHashMap<String, Object>();
         if (keys != null)
         {
@@ -106,17 +104,17 @@ public class Core {
         return resultMap;
     }
 
-    public static List processModelList(List modelList, Class modelClass)
+    public static List<Map> processModelList(List modelList, Class modelClass)
     {
         return processModelList(modelList, modelClass, null, null);
     }
 
-    public static List processModelList(List modelList, Class modelClass, Object invoker)
+    public static List<Map> processModelList(List modelList, Class modelClass, Object invoker)
     {
         return processModelList(modelList, modelClass, invoker, null);
     }
 
-    public static List processModelList(List modelList, Class<?> modelClass, Object invoker, String[] keys)
+    public static List<Map> processModelList(List modelList, Class<?> modelClass, Object invoker, String[] keys)
     {
         if (modelList == null || modelClass == null)
         {
@@ -206,7 +204,7 @@ public class Core {
         return null;
     }
 
-    public static List processModelList(List modelList, ProcessModelInterface processModelInterface, String[] keys)
+    public static List<Map> processModelList(List modelList, ProcessModelInterface processModelInterface, String[] keys)
     {
         ArrayList<Map> resultList = new ArrayList<Map>();
         for (Object model : modelList)
@@ -221,7 +219,7 @@ public class Core {
         return  resultList;
     }
 
-    public static List processModelList(List modelList, ProcessModelWithArgsInterface processModelWithArgsInterface, Object[] args, String[] keys)
+    public static List<Map> processModelList(List modelList, ProcessModelWithArgsInterface processModelWithArgsInterface, Object[] args, String[] keys)
     {
         ArrayList<Map> resultList = new ArrayList<Map>();
         for (Object model : modelList)
