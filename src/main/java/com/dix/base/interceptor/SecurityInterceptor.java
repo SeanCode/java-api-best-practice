@@ -15,7 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by dd on 9/8/15.
@@ -39,9 +41,8 @@ public class SecurityInterceptor implements HandlerInterceptor
 
     private boolean canGuestAccess(String path)
     {
-        return CoreConfig.getInstance().getGuestCanAccessPathPatternList()
-                .stream()
-                .anyMatch(p -> p.matcher(path).matches());
+        List<Pattern> patternList = CoreConfig.getInstance().getGuestCanAccessPathPatternList().get();
+        return patternList.stream().anyMatch(p -> p.matcher(path).matches());
     }
 
     private String getRequiredParam(HttpServletRequest httpServletRequest, String key) throws ParamNotSetException {

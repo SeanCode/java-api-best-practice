@@ -20,7 +20,15 @@ public class BootApplication {
 
     public static void main(String[] args) throws Exception {
 
-        CoreConfig.getInstance().addToGuestCanAccessPathPatternList(Lists.newArrayList(Config.PATH_GUEST_CAN_ACCESS_PATTERN));
+        CoreConfig.getInstance()
+                .getGuestCanAccessPathPatternList()
+                .add(Lists.newArrayList(Config.PATH_GUEST_CAN_ACCESS_PATTERN));
+
+        CoreConfig.getInstance()
+                .getDefaultInterceptorExcludePathList()
+                .add(Lists.newArrayList(Config.DEFAULT_INTERCEPTOR_EXCLUDE_PATH_PATTERN));
+
+        CoreConfig.getInstance().getDebug().set(true);
 
         SpringApplication.run(BootApplication.class, args);
     }

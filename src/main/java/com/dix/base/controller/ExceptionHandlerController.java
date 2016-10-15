@@ -1,5 +1,6 @@
 package com.dix.base.controller;
 
+import com.dix.base.common.CoreConfig;
 import com.dix.base.common.ErrorResponse;
 import com.dix.base.exception.BaseException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -23,16 +24,28 @@ public class ExceptionHandlerController {
 
         if (ex != null)
         {
-            String message = ExceptionUtils.getStackTrace(ex);
-            errorResponse.setMessage(message);
+            if (CoreConfig.getInstance().getDebug().get())
+            {
+                errorResponse.setMessage(ExceptionUtils.getStackTrace(ex));
+            }
+            else
+            {
+                errorResponse.setMessage(ex.getMessage());
+            }
 
             ex.printStackTrace();
         }
 
         if (e != null)
         {
-            String message = ExceptionUtils.getStackTrace(e);
-            errorResponse.setMessage(message);
+            if (CoreConfig.getInstance().getDebug().get())
+            {
+                errorResponse.setMessage(ExceptionUtils.getStackTrace(e));
+            }
+            else
+            {
+                errorResponse.setMessage(e.getMessage());
+            }
 
             if (e instanceof MissingServletRequestParameterException)
             {

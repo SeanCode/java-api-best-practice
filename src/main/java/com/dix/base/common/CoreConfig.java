@@ -1,7 +1,11 @@
 package com.dix.base.common;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.BinaryOperator;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
@@ -11,13 +15,23 @@ public class CoreConfig {
 
     private static volatile CoreConfig instance;
 
-    private List<Pattern> guestCanAccessPathPatternList;
+    private ConfigItemList<Pattern> guestCanAccessPathPatternList;
+
+    private ConfigItemList<String> defaultInterceptorExcludePathList;
+
+    private ConfigItem<Boolean> debug;
+
 
     private CoreConfig() {
 
-        guestCanAccessPathPatternList = new ArrayList<>();
+        guestCanAccessPathPatternList = new ConfigItemList<Pattern>((item1, item2) -> (item1.pattern().equals(item2.pattern()) ? 1 : 0));
         guestCanAccessPathPatternList.add(Pattern.compile("^/error*"));
 
+        defaultInterceptorExcludePathList = new ConfigItemList<String>((item1, item2) -> (item1.equals(item2) ? 1 : 0));
+        defaultInterceptorExcludePathList.add("/error**");
+        defaultInterceptorExcludePathList.add("/static/**");
+
+        debug = new ConfigItem<Boolean>(false);
     }
 
     public static CoreConfig getInstance() {
@@ -31,31 +45,75 @@ public class CoreConfig {
         return instance;
     }
 
-
-    public void addToGuestCanAccessPathPatternList(Pattern pattern)
-    {
-        if (guestCanAccessPathPatternList.stream()
-                .filter(p -> p.pattern().equals(pattern.pattern()))
-                .count() == 0)
-        {
-            guestCanAccessPathPatternList.add(pattern);
-        }
-    }
-
-    public void addToGuestCanAccessPathPatternList(List<Pattern> patternList)
-    {
-        patternList.forEach(this::addToGuestCanAccessPathPatternList);
-    }
-
-    public void removeFromGuestCanAccessPathList(Pattern pattern)
-    {
-        guestCanAccessPathPatternList.removeIf(p -> p.pattern().equals(pattern.pattern()));
-    }
-
-    public List<Pattern> getGuestCanAccessPathPatternList()
+    public ConfigItemList<Pattern> getGuestCanAccessPathPatternList()
     {
         return guestCanAccessPathPatternList;
     }
 
+    public ConfigItemList<String> getDefaultInterceptorExcludePathList()
+    {
+        return defaultInterceptorExcludePathList;
+    }
+
+    public ConfigItem<Boolean> getDebug()
+    {
+        return debug;
+    }
+
+
+    public class ConfigItemList<T>
+    {
+        private List<T> itemList;
+        private Comparator<T> comparator;
+
+        public ConfigItemList(Comparator<T> comparator)
+        {
+            itemList = new ArrayList<T>();
+            this.comparator = comparator;
+        }
+
+        public void add(T item)
+        {
+            if (itemList.stream().filter(i -> (comparator.compare(i, item) > 0)).count() == 0)
+            {
+                itemList.add(item);
+            }
+        }
+
+        public void add(List<T> itemList)
+        {
+            itemList.forEach(this::add);
+        }
+
+        public void remove(T item)
+        {
+            itemList.removeIf(i -> (comparator.compare(i, item) > 0));
+        }
+
+        public List<T> get()
+        {
+            return itemList;
+        }
+    }
+
+    public class ConfigItem<T>
+    {
+        private T item;
+
+        public ConfigItem(T item)
+        {
+            this.item = item;
+        }
+
+        public void set(T item)
+        {
+            this.item = item;
+        }
+
+        public T get()
+        {
+            return item;
+        }
+    }
 
 }
