@@ -37,7 +37,7 @@ public class Util {
         return formatter.format(date);
     }
 
-    public static int parseInt(Object obj)
+    public static Integer parseInt(Object obj, Integer optional)
     {
         if (obj instanceof Long)
         {
@@ -51,17 +51,22 @@ public class Util {
 
         try
         {
-            return (int)Double.parseDouble("" + obj);
+            return (int)Double.parseDouble(obj.toString());
         }
         catch (Exception e)
         {
-            logger.error("parse int error: {}, source: \n{}", e.getMessage(), obj);
+            logger.error("parse Integer error: {}, source: \n{}", e.getMessage(), obj);
         }
 
-        return 0;
+        return optional;
     }
 
-    public static long parseLong(Object obj)
+    public static Integer parseInt(Object obj)
+    {
+        return parseInt(obj, 0);
+    }
+
+    public static Long parseLong(Object obj, Long optional)
     {
         if (obj instanceof Long)
         {
@@ -75,14 +80,43 @@ public class Util {
 
         try
         {
-            return (long)Double.parseDouble("" + obj);
+            return (long)Double.parseDouble(obj.toString());
         }
         catch (Exception e)
         {
-            logger.error("parse long error: {}, source: \n{}", e.getMessage(), obj);
+            logger.error("parse Long error: {}, source: \n{}", e.getMessage(), obj);
         }
 
-        return 0L;
+        return optional;
+    }
+
+    public static Long parseLong(Object obj)
+    {
+        return parseLong(obj, 0L);
+    }
+
+    public static Double parseDouble(Object obj, Double optional)
+    {
+        if (obj instanceof Double)
+        {
+            return (Double) obj;
+        }
+
+        try
+        {
+            return Double.parseDouble(obj.toString());
+        }
+        catch (Exception e)
+        {
+            logger.error("parse Double error: {}, source: \n{}", e.getMessage(), obj);
+        }
+
+        return optional;
+    }
+
+    public static Double parseDouble(Object obj)
+    {
+        return parseDouble(obj, (double) 0);
     }
 
     public static String generateRandomString(int length)
