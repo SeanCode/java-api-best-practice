@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +64,23 @@ public class SecurityInterceptor implements HandlerInterceptor
         // use default cors
         // httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
 
-        logger.trace(String.format("path: %s", path));
-        System.out.println(String.format("path: %s", path));
+        logger.trace("path: {}", path);
+        logger.trace("query: {}", httpServletRequest.getQueryString());
+        logger.trace("content-type: {}", httpServletRequest.getContentType());
+        if (httpServletRequest.getContentType().equals("application/x-www-form-urlencoded"))
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = null;
+            try {
+                BufferedReader reader = httpServletRequest.getReader();
+                while ((line = reader.readLine()) != null)
+                {
+                    stringBuilder.append(line);
+                }
+
+            } catch (Exception e) { /*report an error*/ }
+            logger.trace("body: {}", stringBuilder.toString());
+        }
 
         if (!canGuestAccess(path))
         {
