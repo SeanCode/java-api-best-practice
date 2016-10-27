@@ -6,7 +6,7 @@ package com.dix.base.exception;
 public class NotExistsException extends BaseException {
 
     public NotExistsException() {
-        super(ERROR_NOT_EXISTS, "not exists");
+        this("not exists");
     }
 
     public NotExistsException(String message) {

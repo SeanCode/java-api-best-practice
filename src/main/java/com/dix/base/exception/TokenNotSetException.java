@@ -5,6 +5,10 @@ package com.dix.base.exception;
  */
 public class TokenNotSetException extends BaseException {
     public TokenNotSetException() {
-        super(ERROR_PARAM_NOT_SET, "token is not set");
+        this("token is not set");
+    }
+
+    public TokenNotSetException(String message) {
+        super(ERROR_PARAM_NOT_SET, message);
     }
 }

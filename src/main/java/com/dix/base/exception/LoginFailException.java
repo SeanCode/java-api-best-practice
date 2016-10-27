@@ -5,7 +5,7 @@ package com.dix.base.exception;
  */
 public class LoginFailException extends BaseException {
     public LoginFailException() {
-        super(ERROR_LOGIN, "login fail");
+        this("login fail");
     }
 
     public LoginFailException(String message) {

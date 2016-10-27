@@ -5,6 +5,10 @@ package com.dix.base.exception;
  */
 public class TokenInvalidException extends BaseException {
     public TokenInvalidException() {
-        super(ERROR_TOKEN_INVALID, "token is invalid");
+        this("token is invalid");
+    }
+
+    public TokenInvalidException(String message) {
+        super(ERROR_TOKEN_INVALID, message);
     }
 }

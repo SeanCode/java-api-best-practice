@@ -5,6 +5,11 @@ package com.dix.base.exception;
  */
 public class ExistsException extends BaseException {
     public ExistsException() {
-        super(ERROR_EXISTS, "exists");
+        this("exists");
     }
+
+    public ExistsException(String message) {
+        super(ERROR_EXISTS, message);
+    }
+
 }

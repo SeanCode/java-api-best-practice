@@ -5,7 +5,7 @@ package com.dix.base.exception;
  */
 public class NotAllowedException extends BaseException {
     public NotAllowedException() {
-        super(ERROR_NOT_ALLOWED, "not allowed");
+        this("not allowed");
     }
 
     public NotAllowedException(String message) {

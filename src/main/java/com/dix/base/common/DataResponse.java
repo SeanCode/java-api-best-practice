@@ -34,6 +34,12 @@ public class DataResponse {
         return set(key, object);
     }
 
+    public DataResponse putAll(Map<String, Object> data)
+    {
+        data.entrySet().forEach(entry -> this.data.put(entry.getKey(), entry.getValue()));
+        return this;
+    }
+
     public DataResponse set(String key, Object object)
     {
         this.data.put(key, object);
