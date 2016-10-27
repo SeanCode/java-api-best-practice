@@ -64,23 +64,12 @@ public class SecurityInterceptor implements HandlerInterceptor
         // use default cors
         // httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
 
+        logger.trace("->");
         logger.trace("path: {}", path);
         logger.trace("query: {}", httpServletRequest.getQueryString());
-        logger.trace("content-type: {}", httpServletRequest.getContentType());
-        if (httpServletRequest.getContentType().equals("application/x-www-form-urlencoded"))
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            String line = null;
-            try {
-                BufferedReader reader = httpServletRequest.getReader();
-                while ((line = reader.readLine()) != null)
-                {
-                    stringBuilder.append(line);
-                }
-
-            } catch (Exception e) { /*report an error*/ }
-            logger.trace("body: {}", stringBuilder.toString());
-        }
+        logger.trace("parameter: ");
+        httpServletRequest.getParameterMap().entrySet().forEach(stringEntry -> logger.trace("{}: {}", stringEntry.getKey(), stringEntry.getValue()));
+        logger.trace("<-");
 
         if (!canGuestAccess(path))
         {
