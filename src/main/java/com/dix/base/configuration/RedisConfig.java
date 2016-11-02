@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
@@ -55,9 +56,7 @@ public class RedisConfig {
     }
 
     @Bean(name = "RedisTemplate")
-    RedisTemplate redisTemplate() {
-        RedisTemplate template = new RedisTemplate();
-        template.setConnectionFactory( jedisConnectionFactory() );
-        return template;
+    StringRedisTemplate redisTemplate() {
+        return new StringRedisTemplate(jedisConnectionFactory() );
     }
 }
