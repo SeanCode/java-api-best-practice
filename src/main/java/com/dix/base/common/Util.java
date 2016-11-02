@@ -2,6 +2,7 @@ package com.dix.base.common;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -209,6 +210,28 @@ public class Util {
         }
 
         return object;
+    }
+
+
+    public static boolean containsKey(Map map, Object key) {
+        return map != null && key != null && map.containsKey(key);
+    }
+
+    public static boolean containsKey(Map map, Object... keys) {
+        if (map == null || keys == null)
+        {
+            return false;
+        }
+
+        for (Object key : keys)
+        {
+            if (!map.containsKey(key))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
