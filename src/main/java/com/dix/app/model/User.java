@@ -12,8 +12,6 @@ import java.util.Map;
 /**
  * Created by dd on 1/26/16.
  */
-@Entity
-@Table(name = "user", schema = "dix", catalog = "")
 public class User implements ModelApiInterface  {
 
     private Long id;
@@ -34,10 +32,7 @@ public class User implements ModelApiInterface  {
     private Long createTime;
     private Long updateTime;
 
-    @Id
-    @Column(name = "id", nullable = false)
     @JsonProperty("id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -46,8 +41,6 @@ public class User implements ModelApiInterface  {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "uid", nullable = false, length = 99)
     @JsonProperty("uid")
     public String getUid() {
         return uid;
@@ -57,8 +50,6 @@ public class User implements ModelApiInterface  {
         this.uid = uid;
     }
 
-    @Basic
-    @Column(name = "username", nullable = false, length = 99)
     @JsonProperty("username")
     public String getUsername() {
         return username;
@@ -68,8 +59,6 @@ public class User implements ModelApiInterface  {
         this.username = username;
     }
 
-    @Basic
-    @Column(name = "phone", nullable = false, length = 99)
     @JsonProperty("phone")
     public String getPhone() {
         return phone;
@@ -79,8 +68,6 @@ public class User implements ModelApiInterface  {
         this.phone = phone;
     }
 
-    @Basic
-    @Column(name = "password", nullable = false, length = 199)
     @JsonProperty("password")
     public String getPassword() {
         return password;
@@ -90,8 +77,6 @@ public class User implements ModelApiInterface  {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "email", nullable = false, length = 99)
     @JsonProperty("email")
     public String getEmail() {
         return email;
@@ -101,8 +86,6 @@ public class User implements ModelApiInterface  {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "name", nullable = false, length = 99)
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -112,15 +95,11 @@ public class User implements ModelApiInterface  {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "tel", nullable = false, length = 99)
     @JsonProperty("tel")
     public String getTel() { return tel; }
 
     public void setTel(String tel) { this.tel = tel; }
 
-    @Basic
-    @Column(name = "gender", nullable = false)
     @JsonProperty("gender")
     public Integer getGender() {
         return gender;
@@ -130,8 +109,6 @@ public class User implements ModelApiInterface  {
         this.gender = gender;
     }
 
-    @Basic
-    @Column(name = "birthday", nullable = false)
     @JsonProperty("birthday")
     public Long getBirthday() {
         return birthday;
@@ -141,8 +118,6 @@ public class User implements ModelApiInterface  {
         this.birthday = birthday;
     }
 
-    @Basic
-    @Column(name = "avatar", nullable = false, length = 99)
     @JsonProperty("avatar")
     public String getAvatar() {
         return avatar;
@@ -152,8 +127,6 @@ public class User implements ModelApiInterface  {
         this.avatar = avatar;
     }
 
-    @Basic
-    @Column(name = "source_id", nullable = false)
     @JsonProperty("source_id")
     public Integer getSourceId() {
         return sourceId;
@@ -163,8 +136,6 @@ public class User implements ModelApiInterface  {
         this.sourceId = sourceId;
     }
 
-    @Basic
-    @Column(name = "source_type", nullable = false)
     @JsonProperty("source_type")
     public Integer getSourceType() {
         return sourceType;
@@ -174,8 +145,6 @@ public class User implements ModelApiInterface  {
         this.sourceType = sourceType;
     }
 
-    @Basic
-    @Column(name = "source_client", nullable = false)
     @JsonProperty("source_client")
     public Integer getSourceClient() {
         return sourceClient;
@@ -185,8 +154,6 @@ public class User implements ModelApiInterface  {
         this.sourceClient = sourceClient;
     }
 
-    @Basic
-    @Column(name = "weight", nullable = false)
     @JsonProperty("weight")
     public Integer getWeight() {
         return weight;
@@ -196,8 +163,6 @@ public class User implements ModelApiInterface  {
         this.weight = weight;
     }
 
-    @Basic
-    @Column(name = "create_time", nullable = false)
     @JsonProperty("create_time")
     public Long getCreateTime() {
         return createTime;
@@ -207,8 +172,6 @@ public class User implements ModelApiInterface  {
         this.createTime = createTime;
     }
 
-    @Basic
-    @Column(name = "update_time", nullable = false)
     @JsonProperty("update_time")
     public Long getUpdateTime() {
         return updateTime;
@@ -284,7 +247,6 @@ public class User implements ModelApiInterface  {
         }
     }
 
-    @Transient
     public static String[] getBasicAttrs() {
         return new String[] {
                 "id",
@@ -298,7 +260,6 @@ public class User implements ModelApiInterface  {
         };
     }
 
-    @Transient
     @Override
     public String[] getAttributes() {
         return new String[] {
@@ -318,7 +279,6 @@ public class User implements ModelApiInterface  {
         };
     }
 
-    @Transient
     @Override
     public String[] getBasicAttributes() {
         return new String[] {
@@ -331,7 +291,6 @@ public class User implements ModelApiInterface  {
         };
     }
 
-    @Transient
     @Override
     public String[] getDetailAttributes() {
         return new String[] {

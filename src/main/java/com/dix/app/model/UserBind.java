@@ -9,8 +9,7 @@ import com.dix.base.common.ModelApiInterface;
 import javax.persistence.*;
 import java.util.Map;
 
-@Entity
-@Table(name = "user_bind", schema = "smartwork_user", catalog = "")
+
 public class UserBind implements ModelApiInterface {
 
     public static final int TYPE_WEXIN = 1;
@@ -24,10 +23,7 @@ public class UserBind implements ModelApiInterface {
     private Long createTime;
     private Long updateTime;
 
-    @Id
-    @Column(name = "id", nullable = false)
     @JsonProperty("id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -36,8 +32,6 @@ public class UserBind implements ModelApiInterface {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "type", nullable = false)
     @JsonProperty("type")
     public Integer getType() {
         return type;
@@ -47,10 +41,7 @@ public class UserBind implements ModelApiInterface {
         this.type = type;
     }
 
-    @Basic
-    @Column(name = "user_id", nullable = false)
     @JsonProperty("user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getUserId() {
         return userId;
     }
@@ -59,8 +50,6 @@ public class UserBind implements ModelApiInterface {
         this.userId = userId;
     }
 
-    @Basic
-    @Column(name = "outer_user_id", nullable = false)
     @JsonProperty("outer_user_id")
     public String getOuterUserId() {
         return outerUserId;
@@ -70,8 +59,6 @@ public class UserBind implements ModelApiInterface {
         this.outerUserId = outerUserId;
     }
 
-    @Basic
-    @Column(name = "data", nullable = false, length = 255)
     @JsonProperty("data")
     public String getData() {
         return data;
@@ -81,8 +68,6 @@ public class UserBind implements ModelApiInterface {
         this.data = data;
     }
 
-    @Basic
-    @Column(name = "weight", nullable = false)
     @JsonProperty("weight")
     public Integer getWeight() {
         return weight;
@@ -92,8 +77,6 @@ public class UserBind implements ModelApiInterface {
         this.weight = weight;
     }
 
-    @Basic
-    @Column(name = "create_time", nullable = false)
     @JsonProperty("create_time")
     public Long getCreateTime() {
         return createTime;
@@ -103,8 +86,6 @@ public class UserBind implements ModelApiInterface {
         this.createTime = createTime;
     }
 
-    @Basic
-    @Column(name = "update_time", nullable = false)
     @JsonProperty("update_time")
     public Long getUpdateTime() {
         return updateTime;
@@ -162,7 +143,6 @@ public class UserBind implements ModelApiInterface {
         }
     }
 
-    @Transient
     public static String[] getBasicAttrs() {
         return new String[] {
                 "id",
@@ -173,7 +153,6 @@ public class UserBind implements ModelApiInterface {
         };
     }
 
-    @Transient
     @Override
     public String[] getAttributes() {
         return new String[] {
@@ -185,7 +164,6 @@ public class UserBind implements ModelApiInterface {
         };
     }
 
-    @Transient
     @Override
     public String[] getBasicAttributes() {
         return new String[] {
@@ -197,7 +175,6 @@ public class UserBind implements ModelApiInterface {
         };
     }
 
-    @Transient
     @Override
     public String[] getDetailAttributes() {
         return new String[] {

@@ -5,6 +5,10 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailConstants;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Type;

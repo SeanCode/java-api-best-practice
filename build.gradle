@@ -57,7 +57,6 @@ dependencies {
     compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
     compile 'org.springframework.data:spring-data-redis:1.7.4.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-web:1.4.1.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.4.1.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-freemarker:1.4.1.RELEASE'
 
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:1.4.1.RELEASE")

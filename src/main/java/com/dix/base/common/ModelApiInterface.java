@@ -1,6 +1,5 @@
 package com.dix.base.common;
 
-import javax.persistence.Transient;
 import java.util.Map;
 
 /**
@@ -10,13 +9,10 @@ public interface ModelApiInterface {
 
     // select concat('"', COLUMN_NAME ,'", ') from information_schema.COLUMNS where TABLE_SCHEMA = "DB" and TABLE_NAME = "TABLE"
 
-    @Transient
     String[] getAttributes();
 
-    @Transient
     String[] getBasicAttributes();
 
-    @Transient
     String[] getDetailAttributes();
 
     default Map<String, Object> processModel() {

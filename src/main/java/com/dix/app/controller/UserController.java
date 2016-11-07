@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -54,7 +55,7 @@ public class UserController {
     }
 
     @RequestMapping("/redis-get")
-    public String redisGet(@Param("key") String key) {
+    public String redisGet(@RequestParam("key") String key) {
 
         return template.boundValueOps(key).get();
     }

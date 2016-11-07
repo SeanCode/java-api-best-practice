@@ -11,8 +11,6 @@ import javax.persistence.*;
 import java.util.Map;
 import java.util.UUID;
 
-@Entity
-@Table(name = "token", schema = "dix", catalog = "")
 public class Token implements ModelApiInterface {
 
     public static final int STATUS_INVALID = 0;
@@ -36,10 +34,7 @@ public class Token implements ModelApiInterface {
         return DigestUtils.md5DigestAsHex(token.getBytes());
     }
 
-    @Id
-    @Column(name = "id", nullable = false)
     @JsonProperty("id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -48,8 +43,6 @@ public class Token implements ModelApiInterface {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "token", nullable = false, length = 99)
     @JsonProperty("token")
     public String getToken() {
         return token;
@@ -59,8 +52,6 @@ public class Token implements ModelApiInterface {
         this.token = token;
     }
 
-    @Basic
-    @Column(name = "type", nullable = false)
     @JsonProperty("type")
     public Integer getType() {
         return type;
@@ -70,8 +61,6 @@ public class Token implements ModelApiInterface {
         this.type = type;
     }
 
-    @Basic
-    @Column(name = "status", nullable = false)
     @JsonProperty("status")
     public Integer getStatus() {
         return status;
@@ -81,15 +70,11 @@ public class Token implements ModelApiInterface {
         this.status = status;
     }
 
-    @Basic
-    @Column(name = "user_id", nullable = false)
     @JsonProperty("user_id")
     public Long getUserId() { return userId; }
 
     public void setUserId(Long userId) { this.userId = userId; }
 
-    @Basic
-    @Column(name = "expire_time", nullable = false)
     @JsonProperty("expire_time")
     public Long getExpireTime() {
         return expireTime;
@@ -99,8 +84,6 @@ public class Token implements ModelApiInterface {
         this.expireTime = expireTime;
     }
 
-    @Basic
-    @Column(name = "create_time", nullable = false)
     @JsonProperty("create_time")
     public Long getCreateTime() {
         return createTime;
@@ -110,8 +93,6 @@ public class Token implements ModelApiInterface {
         this.createTime = createTime;
     }
 
-    @Basic
-    @Column(name = "update_time", nullable = false)
     @JsonProperty("update_time")
     public Long getUpdateTime() {
         return updateTime;
@@ -169,7 +150,6 @@ public class Token implements ModelApiInterface {
         }
     }
 
-    @Transient
     @Override
     public String[] getAttributes() {
         return new String[] {
@@ -182,7 +162,6 @@ public class Token implements ModelApiInterface {
         };
     }
 
-    @Transient
     @Override
     public String[] getBasicAttributes() {
         return new String[] {
@@ -195,7 +174,6 @@ public class Token implements ModelApiInterface {
         };
     }
 
-    @Transient
     @Override
     public String[] getDetailAttributes() {
         return new String[] {
