@@ -89,21 +89,6 @@ public class Redis {
 
     public Jedis getClient()
     {
-        if (jedis == null || !jedis.isConnected() || jedis.getClient().isBroken())
-        {
-            if (jedis != null)
-            {
-                jedis.close();
-            }
-
-            jedis = jedisPool.getResource();
-        }
-
-        return jedis;
-    }
-
-    public Jedis makeClient()
-    {
         return jedisPool.getResource();
     }
 
@@ -124,6 +109,9 @@ public class Redis {
         String redisKey = getKeyOfLock(key);
         Long count = jedis.incrBy(redisKey, 1);
         jedis.expire(redisKey, expireSeconds);
+
+        jedis.close();
+
         return count == 1;
     }
 
@@ -134,6 +122,7 @@ public class Redis {
         String redisKey = getKeyOfLock(key);
 
         jedis.del(redisKey);
+        jedis.close();
     }
 
     public <T> T get(String key, RedisGetMethodInterface redisGetMethodInterface, Type type, int expireSeconds)
@@ -147,6 +136,8 @@ public class Redis {
             data = Util.jsonEncode(dataObject);
             jedis.setex(key, expireSeconds, data);
         }
+
+        jedis.close();
 
         return Util.jsonDecode(data, type);
     }
