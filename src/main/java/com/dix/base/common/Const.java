@@ -5,7 +5,7 @@ package com.dix.base.common;
  */
 public class Const
 {
-    private static final String REDIS_KEY_PREFIX = "dix.api";
+    public static final String REDIS_KEY_PREFIX = "dix.api";
 
     public static final int WEIGHT_NORMAL = 0;
     public static final int WEIGHT_DELETED = -1;

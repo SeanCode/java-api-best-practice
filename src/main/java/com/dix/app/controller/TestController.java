@@ -3,6 +3,8 @@ package com.dix.app.controller;
 import com.dix.app.model.User;
 import com.dix.base.common.DataResponse;
 import com.dix.app.service.UserService;
+import com.dix.base.common.Redis;
+import com.dix.base.common.Util;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -31,11 +33,17 @@ import java.util.Map;
 @RequestMapping("/test")
 public class TestController {
 
+    private final RedisTemplate<String, String> template;
+    private final UserService userService;
+    private final Configuration configuration;
+    private final Redis redis;
+
     @Autowired
-    public TestController(@Qualifier("RedisTemplate") RedisTemplate<String, String> template, UserService userService, Configuration configuration) {
+    public TestController(@Qualifier("RedisTemplate") RedisTemplate<String, String> template, UserService userService, Configuration configuration, Redis redis) {
         this.template = template;
         this.userService = userService;
         this.configuration = configuration;
+        this.redis = redis;
     }
 
     @RequestMapping("/transaction")
@@ -112,10 +120,16 @@ public class TestController {
                 ;
     }
 
-    private final RedisTemplate<String, String> template;
+    @RequestMapping("/redis-get")
+    public DataResponse redisGet() {
+        Long time = Util.time();
+        Long cacheTime = redis.get("dd", () -> time, Long.class, 3);
 
-    private final UserService userService;
+        return DataResponse.create()
+                .put("time", cacheTime)
+                ;
+    }
 
-    private final Configuration configuration;
+
 
 }

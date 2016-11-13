@@ -35,16 +35,20 @@ public class UserService {
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserMapper userMapper;
-
     private final UserBindMapper userBindMapper;
-
     private final RedisTemplate<String, String> redisTemplate;
+    private final Redis redis;
 
     @Autowired
-    public UserService(UserBindMapper userBindMapper, @Qualifier("RedisTemplate") RedisTemplate<String, String> redisTemplate, UserMapper userMapper) {
+    public UserService(UserBindMapper userBindMapper,
+                       @Qualifier("RedisTemplate") RedisTemplate<String, String> redisTemplate,
+                       UserMapper userMapper,
+                       @Qualifier("Redis") Redis redis
+    ) {
         this.userBindMapper = userBindMapper;
         this.redisTemplate = redisTemplate;
         this.userMapper = userMapper;
+        this.redis = redis;
     }
 
     public User loginByPhone(String phone, String password) throws InvalidKeySpecException, NoSuchAlgorithmException, LoginFailException {
@@ -106,14 +110,10 @@ public class UserService {
                 }
             }
 
-            // uid = RandomStringUtils.randomAlphanumeric(9);
-
             // lock uid
             String keyLock = Const.getKeyOfUserUidLock(uid);
-            Long lock = redisTemplate.boundValueOps(keyLock).increment(1);
-            redisTemplate.boundValueOps(keyLock).expire(60, TimeUnit.SECONDS);
-            logger.trace(String.format("key: %s, lock: %d", keyLock, lock));
-            if (lock == 1) {
+            if (redis.lock(keyLock, 60))
+            {
                 user.setUid(uid);
                 userMapper.insert(user);
                 return user;
