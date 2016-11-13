@@ -5,11 +5,18 @@ import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Protocol;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -24,11 +31,80 @@ import java.util.concurrent.TimeUnit;
 @Component("Redis")
 public class Redis {
 
-    private RedisTemplate<String, String> redisTemplate;
+    private static Logger logger = LoggerFactory.getLogger(Redis.class);
 
-    public Redis(@Qualifier("RedisTemplate") RedisTemplate<String, String> redisTemplate)
+
+    @Value("${spring.redis.host}")
+    private String host;
+
+    @Value("${spring.redis.password}")
+    private String password;
+
+    @Value("${spring.redis.port}")
+    private Integer port;
+
+    @Value("${spring.redis.database}")
+    private Integer database;
+
+    @Value("${spring.redis.pool.max-active}")
+    private Integer poolMaxActive;
+
+    @Value("${spring.redis.pool.max-idle}")
+    private Integer poolMaxIdle;
+
+    @Value("${spring.redis.pool.max-wait}")
+    private Long poolMaxWait;
+
+    @Value("${spring.redis.pool.min-idle}")
+    private Integer poolMinIdle;
+
+    private Jedis jedis;
+    private JedisPool jedisPool;
+
+    public Redis()
     {
-        this.redisTemplate = redisTemplate;
+    }
+
+    @PostConstruct
+    public void init()
+    {
+        password = Strings.isNullOrEmpty(password) ? null : password;
+
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMinIdle(poolMinIdle);
+        jedisPoolConfig.setMaxIdle(poolMaxIdle);
+        jedisPoolConfig.setMaxTotal(poolMaxActive);
+        jedisPoolConfig.setMaxWaitMillis(poolMaxWait);
+        jedisPool = new JedisPool(jedisPoolConfig, host, port, Protocol.DEFAULT_TIMEOUT, password);
+    }
+
+    @PreDestroy
+    public void onDestroy()
+    {
+        if (jedisPool != null)
+        {
+            jedisPool.destroy();
+        }
+    }
+
+    public Jedis getClient()
+    {
+        if (jedis == null || !jedis.isConnected() || jedis.getClient().isBroken())
+        {
+            if (jedis != null)
+            {
+                jedis.close();
+            }
+
+            jedis = jedisPool.getResource();
+        }
+
+        return jedis;
+    }
+
+    public Jedis makeClient()
+    {
+        return jedisPool.getResource();
     }
 
     private String getKeyOfLock(String key)
@@ -41,31 +117,37 @@ public class Redis {
         return lock(key, 60);
     }
 
-    public boolean lock(String key, long expireSeconds)
+    public boolean lock(String key, int expireSeconds)
     {
+        Jedis jedis = getClient();
+
         String redisKey = getKeyOfLock(key);
-        BoundValueOperations valueOperations = redisTemplate.boundValueOps(redisKey);
-        Long count = valueOperations.increment(1);
-        valueOperations.expire(expireSeconds, TimeUnit.SECONDS);
+        Long count = jedis.incrBy(redisKey, 1);
+        jedis.expire(redisKey, expireSeconds);
         return count == 1;
     }
 
     public void unlock(String key)
     {
+        Jedis jedis = getClient();
+
         String redisKey = getKeyOfLock(key);
-        redisTemplate.delete(redisKey);
+
+        jedis.del(redisKey);
     }
 
     public <T> T get(String key, RedisGetMethodInterface redisGetMethodInterface, Type type, int expireSeconds)
     {
-        BoundValueOperations<String, String> valueOperations = redisTemplate.boundValueOps(key);
-        String data = valueOperations.get();
+        Jedis jedis = getClient();
+
+        String data = jedis.get(key);
         if (Strings.isNullOrEmpty(data))
         {
             Object dataObject = redisGetMethodInterface.method();
             data = Util.jsonEncode(dataObject);
-            valueOperations.set(data, expireSeconds, TimeUnit.SECONDS);
+            jedis.setex(key, expireSeconds, data);
         }
+
         return Util.jsonDecode(data, type);
     }
 }
