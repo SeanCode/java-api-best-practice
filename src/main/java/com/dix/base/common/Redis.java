@@ -104,41 +104,33 @@ public class Redis {
 
     public boolean lock(String key, int expireSeconds)
     {
-        Jedis jedis = getClient();
-
-        String redisKey = getKeyOfLock(key);
-        Long count = jedis.incrBy(redisKey, 1);
-        jedis.expire(redisKey, expireSeconds);
-
-        jedis.close();
-
-        return count == 1;
+        try (Jedis jedis = getClient()) {
+            String redisKey = getKeyOfLock(key);
+            Long count = jedis.incrBy(redisKey, 1);
+            jedis.expire(redisKey, expireSeconds);
+            return count == 1;
+        }
     }
 
     public void unlock(String key)
     {
-        Jedis jedis = getClient();
-
-        String redisKey = getKeyOfLock(key);
-
-        jedis.del(redisKey);
-        jedis.close();
+        try (Jedis jedis = getClient()) {
+            String redisKey = getKeyOfLock(key);
+            jedis.del(redisKey);
+        }
     }
 
     public <T> T get(String key, RedisGetMethodInterface redisGetMethodInterface, Type type, int expireSeconds)
     {
-        Jedis jedis = getClient();
-
-        String data = jedis.get(key);
-        if (Strings.isNullOrEmpty(data))
-        {
-            Object dataObject = redisGetMethodInterface.method();
-            data = Util.jsonEncode(dataObject);
-            jedis.setex(key, expireSeconds, data);
+        try (Jedis jedis = getClient()) {
+            String data = jedis.get(key);
+            if (Strings.isNullOrEmpty(data))
+            {
+                Object dataObject = redisGetMethodInterface.method();
+                data = Util.jsonEncode(dataObject);
+                jedis.setex(key, expireSeconds, data);
+            }
+            return Util.jsonDecode(data, type);
         }
-
-        jedis.close();
-
-        return Util.jsonDecode(data, type);
     }
 }

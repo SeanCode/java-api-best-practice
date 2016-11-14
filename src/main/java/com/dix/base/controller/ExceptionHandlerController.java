@@ -2,8 +2,11 @@ package com.dix.base.controller;
 
 import com.dix.base.common.CoreConfig;
 import com.dix.base.common.ErrorResponse;
+import com.dix.base.common.Util;
 import com.dix.base.exception.BaseException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class ExceptionHandlerController {
 
+    private static Logger logger = LoggerFactory.getLogger(ExceptionHandlerController.class);
+
     @ExceptionHandler(value = {Exception.class, RuntimeException.class, Throwable.class})
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -26,21 +31,21 @@ public class ExceptionHandlerController {
         {
             if (CoreConfig.getInstance().getDebug().get())
             {
-                errorResponse.setMessage(ExceptionUtils.getStackTrace(ex));
+                errorResponse.setMessage(Util.getStackTrace(ex));
             }
             else
             {
                 errorResponse.setMessage(ex.getMessage());
             }
 
-            ex.printStackTrace();
+            logger.error("{}", Util.getStackTrace(ex));
         }
 
         if (e != null)
         {
             if (CoreConfig.getInstance().getDebug().get())
             {
-                errorResponse.setMessage(ExceptionUtils.getStackTrace(e));
+                errorResponse.setMessage(Util.getStackTrace(e));
             }
             else
             {
@@ -61,7 +66,7 @@ public class ExceptionHandlerController {
                 errorResponse.setMessage(baseException.getMessage());
             }
 
-            e.printStackTrace();
+            logger.error("{}", Util.getStackTrace(e));
         }
 
         return errorResponse;

@@ -11,6 +11,8 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.slf4j.Logger;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -236,6 +238,20 @@ public class Util {
         }
 
         return true;
+    }
+
+    public static String getStackTrace(final Throwable throwable) {
+        return getStackTrace(throwable, 5);
+    }
+
+    public static String getStackTrace(final Throwable throwable, int maxLines) {
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw, true);
+        throwable.printStackTrace(pw);
+        String traces = sw.getBuffer().toString();
+        List traceList = Lists.newArrayList(Splitter.on("\n").trimResults().omitEmptyStrings().split(traces));
+        maxLines = maxLines > traceList.size() ? traceList.size() : maxLines;
+        return Joiner.on("\n    ").join(traceList.subList(0, maxLines));
     }
 
 

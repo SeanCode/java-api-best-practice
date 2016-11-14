@@ -5,6 +5,7 @@ import com.dix.base.common.DataResponse;
 import com.dix.app.service.UserService;
 import com.dix.base.common.Redis;
 import com.dix.base.common.Util;
+import com.dix.base.exception.BaseException;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -22,6 +23,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
 
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
@@ -130,6 +132,61 @@ public class TestController {
                 ;
     }
 
+    @RequestMapping("/redis-lock")
+    public DataResponse redisLock() {
+
+        int port = makePort();
+
+        return DataResponse.create()
+                .put("port", port)
+                ;
+    }
+
+    public int makePort()
+    {
+        String lockKey = "lock-test";
+        int lockCount = 0;
+        while (!redis.lock(lockKey, 10))
+        {
+            lockCount++;
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (lockCount > 5)
+            {
+                throw new BaseException(20002, "busy, try later");
+            }
+        }
+
+
+        int port = -1;
+        try (Jedis jedis = redis.getClient()) {
+            String keyOfPortBit = "port.bit";
+            Long offset = jedis.bitpos(keyOfPortBit, false);
+            if (offset < 0 || offset >= 5000) {
+                throw new BaseException(20001, "port not available");
+            }
+
+            jedis.setbit(keyOfPortBit, offset, true);
+
+            String keyOfPortSet = "port.set";
+            jedis.zincrby(keyOfPortSet, offset, offset.toString());
+
+            port = offset.intValue();
+        } finally {
+            redis.unlock(lockKey);
+        }
+
+        return port;
+    }
+
+    @RequestMapping("/exception")
+    public DataResponse exception() {
+        throw new BaseException(0, "test");
+    }
 
 
 }
