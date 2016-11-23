@@ -258,7 +258,7 @@ public class Util {
 
 
     // 手机号验证
-    private static Pattern patternPhoneNumber = Pattern.compile("^1[3458][0-9]\\d{8}$");
+    private static Pattern patternPhoneNumber = Pattern.compile("^1[34578][0-9]\\d{8}$");
     public static Boolean isPhoneNumber(String content)
     {
         return patternPhoneNumber.matcher(content).matches();
