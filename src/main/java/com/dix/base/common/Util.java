@@ -241,7 +241,7 @@ public class Util {
     }
 
     public static String getStackTrace(final Throwable throwable) {
-        return getStackTrace(throwable, 5);
+        return getStackTrace(throwable, 100);
     }
 
     public static String getStackTrace(final Throwable throwable, int maxLines) {
