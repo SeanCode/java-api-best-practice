@@ -6,6 +6,7 @@ import com.dix.base.common.*;
 import com.dix.app.service.UserService;
 import com.dix.base.core.Core;
 import com.dix.base.exception.BaseException;
+import com.dix.base.redis.Redis;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

@@ -1,4 +1,4 @@
-package com.dix.base.common;
+package com.dix.base.redis;
 
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.slf4j.Logger;

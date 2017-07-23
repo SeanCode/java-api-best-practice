@@ -2,6 +2,7 @@ package com.dix.app.service;
 
 import com.dix.app.exception.*;
 import com.dix.base.core.Core;
+import com.dix.base.redis.Redis;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.dix.base.common.*;

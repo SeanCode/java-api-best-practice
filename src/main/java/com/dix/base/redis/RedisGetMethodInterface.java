@@ -1,4 +1,4 @@
-package com.dix.base.common;
+package com.dix.base.redis;
 
 import java.util.Map;
 
