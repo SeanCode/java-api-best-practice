@@ -4,7 +4,7 @@ import com.dix.app.model.Token;
 import com.dix.app.model.User;
 import com.dix.base.common.*;
 import com.dix.app.service.UserService;
-import com.dix.base.core.CoreQuery;
+import com.dix.base.core.Core;
 import com.dix.base.exception.BaseException;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -17,7 +17,6 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 import static org.jooq.impl.DSL.*;
 
 import org.jooq.*;
-import org.jooq.impl.DSL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -229,12 +228,23 @@ public class TestController {
         token.setUserId(1L);
         token.setStatus(Token.STATUS_VALID);
 
-        Long time = Util.time();
         token.setExpireTime(0L);
-        token.setCreateTime(time);
-        token.setUpdateTime(time);
 
         token.save();
+
+        return DataResponse.create()
+                .put("token", token)
+                ;
+    }
+
+    @RequestMapping("/update")
+    public DataResponse update() {
+
+        Token token = Core.Q().findById(Token.class, 8L);
+        token.save();
+
+        token.updateCol("expire_time", Util.time());
+        token.fetch();
 
         return DataResponse.create()
                 .put("token", token)

@@ -1,6 +1,6 @@
 package com.dix.base.configuration;
 
-import com.dix.base.common.Core;
+import com.dix.base.core.Core;
 import com.dix.base.common.SpringMybatisObjectFactory;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,8 @@
-package com.dix.base.common;
+package com.dix.base.core;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.BinaryOperator;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**

@@ -1,8 +1,5 @@
 package com.dix.base.service;
 
-import com.dix.app.controller.FileController;
-import com.dix.base.common.Core;
-import com.dix.base.common.SpringMybatisObjectFactory;
 import com.dix.base.exception.InvalidConfigurationException;
 import com.dix.base.exception.WrongParamException;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -13,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

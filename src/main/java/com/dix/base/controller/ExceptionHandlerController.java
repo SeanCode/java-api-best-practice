@@ -1,10 +1,9 @@
 package com.dix.base.controller;
 
-import com.dix.base.common.CoreConfig;
+import com.dix.base.core.CoreConfig;
 import com.dix.base.common.ErrorResponse;
 import com.dix.base.common.Util;
 import com.dix.base.exception.BaseException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

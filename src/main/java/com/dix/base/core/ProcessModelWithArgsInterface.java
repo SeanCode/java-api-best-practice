@@ -1,4 +1,4 @@
-package com.dix.base.common;
+package com.dix.base.core;
 
 import java.util.Map;
 

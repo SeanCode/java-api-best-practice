@@ -1,4 +1,4 @@
-package com.dix.base.common;
+package com.dix.base.core;
 
 /**
  * Created by dd on 7/24/16.

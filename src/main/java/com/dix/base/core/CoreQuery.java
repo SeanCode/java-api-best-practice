@@ -1,8 +1,5 @@
 package com.dix.base.core;
 
-import com.dix.app.model.User;
-import com.dix.base.common.Core;
-import com.dix.base.common.CoreConfig;
 import com.dix.base.exception.BaseException;
 import com.dix.base.exception.NotExistsException;
 import com.dix.base.model.Model;
@@ -15,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
-import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.*;
 
 /**
  * Created by dd on 21/07/2017.
@@ -83,6 +80,17 @@ public class CoreQuery {
         }
 
         return map;
+    }
+
+    public <T> void updateCol(Class<T> c, Long id, String colName, Object colValue) {
+        DSLContext dsl = getDSLContext();
+
+        logger.info("update col: {} -> {}, id: {}", colName, colValue, id);
+
+        dsl.update(table(getTableName(c)))
+                .set(field(colName), colValue)
+                .where(field("id").eq(id))
+                .execute();
     }
 
     public <T> SelectQuery<Record> createQuery(Class<T> c) {

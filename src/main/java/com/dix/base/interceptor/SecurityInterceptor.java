@@ -1,6 +1,6 @@
 package com.dix.base.interceptor;
 
-import com.dix.base.common.CoreConfig;
+import com.dix.base.core.CoreConfig;
 import com.dix.base.common.Const;
 import com.dix.base.common.Util;
 import com.dix.base.exception.InvalidConfigurationException;
@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;

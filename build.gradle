@@ -145,34 +145,33 @@ artifactory {
             username = "${artifactory_username}"
             password = "${artifactory_password}"
             maven = true
-
         }
     }
 }
 
-//jooq {
-//    version = '3.9.2'
-//    edition = 'OSS'
-//    dd(sourceSets.main) {
-//        jdbc {
-//            driver = 'com.mysql.jdbc.Driver'
-//            url = 'jdbc:mysql://localhost/'
-//            schema = 'dix'
-//            user = 'root'
-//            password = '7'
-//        }
-//        generator {
-//            database {
-//            }
-//            generate {
-//                tables = true
-//                records = false
-//                pojos = true
-//            }
-//            target {
-//                packageName = 'com.dix.app.jooq'
-//                directory = 'src/main/java'
-//            }
-//        }
-//    }
-//}
+jooq {
+    version = '3.9.2'
+    edition = 'OSS'
+    dd(sourceSets.main) {
+        jdbc {
+            driver = 'com.mysql.jdbc.Driver'
+            url = 'jdbc:mysql://localhost/'
+            schema = 'dix'
+            user = 'root'
+            password = '7'
+        }
+        generator {
+            database {
+            }
+            generate {
+                tables = true
+                records = false
+                pojos = true
+            }
+            target {
+                packageName = 'com.dix.app.jooq'
+                directory = 'src/main/java'
+            }
+        }
+    }
+}

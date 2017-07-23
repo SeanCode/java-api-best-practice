@@ -1,7 +1,7 @@
 package com.dix.app;
 
 import com.dix.app.common.Config;
-import com.dix.base.common.CoreConfig;
+import com.dix.base.core.CoreConfig;
 import com.google.common.collect.Lists;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

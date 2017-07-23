@@ -1,8 +1,7 @@
 package com.dix.base.configuration;
 
-import com.dix.base.common.CoreConfig;
+import com.dix.base.core.CoreConfig;
 import com.dix.base.interceptor.SecurityInterceptor;
-import com.dix.base.service.UploadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {

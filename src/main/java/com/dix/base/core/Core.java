@@ -1,6 +1,6 @@
-package com.dix.base.common;
+package com.dix.base.core;
 
-import com.dix.base.core.CoreQuery;
+import com.dix.base.model.BaseModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.slf4j.Logger;
@@ -87,9 +87,9 @@ public class Core {
     }
 
     public static Map<String, Object> processModel(Object model, String[] keys) {
-        if (keys == null && model instanceof ModelApiInterface)
+        if (keys == null && model instanceof BaseModel)
         {
-            keys = ((ModelApiInterface) model).getBasicAttributes();
+            keys = ((BaseModel) model).getBasicAttributes();
         }
 
         Map map;

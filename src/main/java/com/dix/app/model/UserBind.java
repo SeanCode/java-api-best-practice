@@ -1,16 +1,14 @@
 package com.dix.app.model;
 
-import com.dix.base.common.Util;
-import com.dix.app.mapper.UserBindMapper;
+import com.dix.base.model.BaseModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.dix.base.common.Core;
-import com.dix.base.common.ModelApiInterface;
+import com.dix.base.core.Core;
 
-import javax.persistence.*;
 import java.util.Map;
 
 
-public class UserBind implements ModelApiInterface {
+public class UserBind extends BaseModel {
 
     public static final int TYPE_WEXIN = 1;
 
@@ -95,135 +93,23 @@ public class UserBind implements ModelApiInterface {
         this.updateTime = updateTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserBind that = (UserBind) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (outerUserId != null ? !outerUserId.equals(that.outerUserId) : that.outerUserId != null) return false;
-        if (data != null ? !data.equals(that.data) : that.data != null) return false;
-        if (weight != null ? !weight.equals(that.weight) : that.weight != null) return false;
-        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
-        if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
-
-        return true;
-    }
 
     @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (outerUserId != null ? outerUserId.hashCode() : 0);
-        result = 31 * result + (data != null ? data.hashCode() : 0);
-        result = 31 * result + (weight != null ? weight.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        return result;
-    }
-
-    public Long save() {
-        UserBindMapper userBindMapper = (UserBindMapper) Core.getBean(UserBindMapper.class);
-
-        if (this.getId() == null || this.getId() == 0)
-        {
-            this.setCreateTime(Util.time());
-            this.setUpdateTime(this.getCreateTime());
-            return userBindMapper.insert(this);
-        }
-        else
-        {
-            this.setUpdateTime(Util.time());
-            return userBindMapper.update(this);
-        }
-    }
-
-    public static String[] getBasicAttrs() {
-        return new String[] {
-                "id",
-                "type",
-                "user_id",
-                "outer_user_id",
-                "data"
-        };
-    }
-
-    @Override
+    @JsonIgnore
     public String[] getAttributes() {
-        return new String[] {
-                "id",
-                "type",
-                "user_id",
-                "outer_user_id",
-                "data"
-        };
+        return new String[] { "id", "type", "user_id", "outer_user_id", "data" };
     }
 
     @Override
+    @JsonIgnore
     public String[] getBasicAttributes() {
-        return new String[] {
-                "id",
-                "type",
-                "user_id",
-                "outer_user_id",
-                "data"
-        };
+        return new String[] { "id", "type", "user_id", "outer_user_id", "data" };
     }
 
     @Override
+    @JsonIgnore
     public String[] getDetailAttributes() {
-        return new String[] {
-                "id",
-                "type",
-                "user_id",
-                "outer_user_id",
-                "data",
-                "create_time",
-                "update_time"
-        };
-    }
-
-    @Override
-    public Map<String, Object> processModel() {
-        return this.processModel(this, null);
-    }
-
-    @Override
-    public Map<String, Object> processModel(Object model) {
-        return this.processModel(model, null);
-    }
-
-    @Override
-    public Map<String, Object> processModel(String[] keys) {
-        return this.processModel(null, keys);
-    }
-
-    @Override
-    public Map<String, Object> processModel(Object model, String[] keys) {
-        Map<String, Object> map = Core.processModel(model, keys);
-
-        if (map != null)
-        {
-
-        }
-
-        return map;
-    }
-
-    public static Map<String, Object> processModelStatic(Object model, String[] keys) {
-        Map<String, Object> map = Core.processModel(model, keys);
-
-        if (map != null)
-        {
-
-        }
-
-        return map;
+        return new String[] { "id", "type", "user_id", "outer_user_id", "data", "create_time", "update_time" };
     }
 
     public Map<String, Object> processModelForClient(Object model, String[] keys, Object[] params) {
