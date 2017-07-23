@@ -1,5 +1,7 @@
 package com.dix.base.common;
 
+import com.dix.app.model.User;
+
 import java.util.Map;
 
 /**
@@ -8,6 +10,8 @@ import java.util.Map;
 public interface ModelApiInterface {
 
     // select concat('"', COLUMN_NAME ,'", ') from information_schema.COLUMNS where TABLE_SCHEMA = "DB" and TABLE_NAME = "TABLE"
+
+//    String getTableName();
 
     String[] getAttributes();
 

@@ -1,6 +1,7 @@
 package com.dix.app.mapper;
 
 import com.dix.app.model.User;
+import com.dix.base.model.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,15 @@ import java.util.Map;
 
 @Mapper
 @Component
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User> {
+
+    @Override
+    Long insert(User user);
+
+    @Override
+    Long update(User user);
+
+
 
     User existsById(@Param("user_id") Long userId);
 
@@ -33,10 +42,6 @@ public interface UserMapper {
     User getUserByOuterUserId(@Param("type") Integer type, @Param("outer_user_id") String outerUserId);
 
     Integer getUserCount();
-
-    Long insert(User user);
-
-    Long update(User user);
 
     User findById(@Param("id") Long id);
 

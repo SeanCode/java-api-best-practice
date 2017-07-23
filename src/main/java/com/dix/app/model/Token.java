@@ -2,6 +2,8 @@ package com.dix.app.model;
 
 import com.dix.base.common.Util;
 import com.dix.app.mapper.TokenMapper;
+import com.dix.base.model.BaseModel;
+import com.dix.base.model.Model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.dix.base.common.Core;
 import com.dix.base.common.ModelApiInterface;
@@ -11,7 +13,8 @@ import javax.persistence.*;
 import java.util.Map;
 import java.util.UUID;
 
-public class Token implements ModelApiInterface {
+@Model(tableName = "token", mapper = TokenMapper.class)
+public class Token extends BaseModel implements ModelApiInterface {
 
     public static final int STATUS_INVALID = 0;
     public static final int STATUS_VALID = 1;
@@ -134,22 +137,6 @@ public class Token implements ModelApiInterface {
         return result;
     }
 
-    public Long save() {
-        TokenMapper tokenMapper = (TokenMapper) Core.getBean(TokenMapper.class);
-
-        if (this.getId() == null || this.getId() == 0)
-        {
-            this.setCreateTime(Util.time());
-            this.setUpdateTime(this.getCreateTime());
-            return tokenMapper.insert(this);
-        }
-        else
-        {
-            this.setUpdateTime(Util.time());
-            return tokenMapper.update(this);
-        }
-    }
-
     @Override
     public String[] getAttributes() {
         return new String[] {
@@ -234,5 +221,10 @@ public class Token implements ModelApiInterface {
         }
 
         return map;
+    }
+
+    public static User findById(Long id)
+    {
+        return Core.Q().findById(User.class, id);
     }
 }

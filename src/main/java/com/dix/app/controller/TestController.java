@@ -1,39 +1,43 @@
 package com.dix.app.controller;
 
+import com.dix.app.model.Token;
 import com.dix.app.model.User;
-import com.dix.base.common.DataResponse;
+import com.dix.base.common.*;
 import com.dix.app.service.UserService;
-import com.dix.base.common.Redis;
-import com.dix.base.common.Util;
+import com.dix.base.core.CoreQuery;
 import com.dix.base.exception.BaseException;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.apache.tomcat.jdbc.pool.DataSource;
+
+import static org.jooq.impl.DSL.*;
+
+import org.jooq.*;
+import org.jooq.impl.DSL;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/test")
 public class TestController {
+
+    private static Logger logger = LoggerFactory.getLogger(TestController.class);
 
     private final RedisTemplate<String, String> template;
     private final UserService userService;
@@ -186,6 +190,55 @@ public class TestController {
     @RequestMapping("/exception")
     public DataResponse exception() {
         throw new BaseException(0, "test");
+    }
+
+    @Autowired
+    DataSource dataSource;
+
+    @RequestMapping("/jooq")
+    public DataResponse jooq() {
+
+
+//        DSLContext dslContext = DSL.using(this.dataSource, SQLDialect.MYSQL);
+//        Result<Record> result = dslContext.select().from("user")
+//                .where(field("id").eq("1"))
+//                .fetch();
+//
+//        logger.info("result {}", result);
+//        Map<String, Object> user = Core.processModel(result.intoMaps().get(0), User.class);
+//        logger.info("map {}", user);
+
+
+        logger.info("{}", Core.Q().findById(User.class, 1L));
+        logger.info("{}", Core.Q().findByCol(User.class, "id", 1L));
+
+        SelectQuery<Record> qb = Core.Q().createQuery(User.class);
+        qb.addConditions(field("id").eq(3L));
+        logger.info("{}", Core.Q().executeQuery(qb));
+
+        return DataResponse.create()
+                .put("user", "")
+                ;
+    }
+
+    @RequestMapping("/save")
+    public DataResponse save() {
+
+        Token token = new Token();
+        token.setToken(Token.makeToken());
+        token.setUserId(1L);
+        token.setStatus(Token.STATUS_VALID);
+
+        Long time = Util.time();
+        token.setExpireTime(0L);
+        token.setCreateTime(time);
+        token.setUpdateTime(time);
+
+        token.save();
+
+        return DataResponse.create()
+                .put("token", token)
+                ;
     }
 
 

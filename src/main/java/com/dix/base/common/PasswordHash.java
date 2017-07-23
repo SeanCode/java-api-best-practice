@@ -197,22 +197,22 @@ public class PasswordHash
         try
         {
             // Print out 10 hashes
-            for(int i = 0; i < 10; i++)
+            for(int q = 0; q < 10; q++)
                 System.out.println(PasswordHash.createHash("p\r\nassw0Rd!"));
 
             // Test password validation
             boolean failure = false;
             System.out.println("Running tests...");
-            for(int i = 0; i < 100; i++)
+            for(int q = 0; q < 100; q++)
             {
-                String password = ""+i;
+                String password = ""+q;
                 String hash = createHash(password);
                 String secondHash = createHash(password);
                 if(hash.equals(secondHash)) {
                     System.out.println("FAILURE: TWO HASHES ARE EQUAL!");
                     failure = true;
                 }
-                String wrongPassword = ""+(i+1);
+                String wrongPassword = ""+(q+1);
                 if(validatePassword(wrongPassword, hash)) {
                     System.out.println("FAILURE: WRONG PASSWORD ACCEPTED!");
                     failure = true;

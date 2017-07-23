@@ -1,5 +1,8 @@
 package com.dix.app.model;
 
+import com.dix.base.common.CoreConfig;
+import com.dix.base.model.BaseModel;
+import com.dix.base.model.Model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.dix.base.common.Core;
 import com.dix.base.common.ModelApiInterface;
@@ -12,8 +15,8 @@ import java.util.Map;
 /**
  * Created by dd on 1/26/16.
  */
-public class User implements ModelApiInterface  {
-
+@Model(tableName = "user", mapper = UserMapper.class)
+public class User extends BaseModel implements ModelApiInterface {
     private Long id;
     private String uid;
     private String username = "";
@@ -231,20 +234,19 @@ public class User implements ModelApiInterface  {
         return result;
     }
 
-    public Long save() {
-        UserMapper userMapper = (UserMapper) Core.getBean(UserMapper.class);
-
+    @Override
+    protected boolean beforeSave() {
         if (this.getId() == null || this.getId() == 0)
         {
             this.setCreateTime(Util.time());
             this.setUpdateTime(this.getCreateTime());
-            return userMapper.insert(this);
         }
         else
         {
             this.setUpdateTime(Util.time());
-            return userMapper.update(this);
         }
+
+        return super.beforeSave();
     }
 
     public static String[] getBasicAttrs() {
@@ -320,4 +322,19 @@ public class User implements ModelApiInterface  {
         return map;
     }
 
+    private static volatile User instance;
+    public static User getInstance() {
+        if (instance == null) {
+            synchronized (User.class) {
+                if (instance == null) {
+                    instance = new User();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public static User Q() {
+        return getInstance();
+    }
 }

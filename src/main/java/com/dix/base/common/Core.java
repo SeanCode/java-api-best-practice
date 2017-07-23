@@ -1,6 +1,8 @@
 package com.dix.base.common;
 
+import com.dix.base.core.CoreQuery;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -18,12 +20,23 @@ public class Core {
     private static final Logger logger = LoggerFactory.getLogger(Core.class);
 
     private static ApplicationContext context;
+    private static DataSource         dataSource;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void setContext(ApplicationContext context)
     {
         Core.context = context;
+    }
+
+    public static void setDataSource(DataSource dataSource)
+    {
+        Core.dataSource = dataSource;
+    }
+
+    public static DataSource getDataSource()
+    {
+        return Core.dataSource;
     }
 
     private static boolean isSpringBean(Class type)
@@ -232,5 +245,10 @@ public class Core {
         }
 
         return  resultList;
+    }
+
+    public static CoreQuery Q()
+    {
+        return CoreQuery.getInstance();
     }
 }
