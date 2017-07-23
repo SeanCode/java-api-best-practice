@@ -250,63 +250,27 @@ public class User extends BaseModel implements ModelApiInterface {
     }
 
     public static String[] getBasicAttrs() {
-        return new String[] {
-                "id",
-                "username",
-                "email",
-                "phone",
-                "name",
-                "gender",
-                "birthday",
-                "avatar"
-        };
+        return new String[] { "id", "username", "email", "phone", "name", "gender", "birthday", "avatar"};
     }
 
     @Override
     public String[] getAttributes() {
         return new String[] {
-                "id",
-                "uid",
-                "username",
-                "email",
-                "phone",
-                "password",
-                "name",
-                "gender",
-                "birthday",
-                "avatar",
-                "weight",
-                "create_time",
-                "update_time"
+                "id", "uid", "username", "email", "phone", "password", "name", "gender", "birthday", "avatar", "weight", "create_time", "update_time"
         };
     }
 
     @Override
     public String[] getBasicAttributes() {
         return new String[] {
-                "id",
-                "username",
-                "email",
-                "phone",
-                "name",
-                "avatar",
+                "id", "username", "email", "phone", "name", "avatar",
         };
     }
 
     @Override
     public String[] getDetailAttributes() {
         return new String[] {
-                "id",
-                "uid",
-                "username",
-                "email",
-                "phone",
-                "name",
-                "gender",
-                "birthday",
-                "avatar",
-                "create_time",
-                "update_time"
+                "id", "uid", "username", "email", "phone", "name", "gender", "birthday", "avatar", "create_time", "update_time"
         };
     }
 
