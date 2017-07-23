@@ -403,7 +403,7 @@ public class UserService {
         {
             return null;
         }
-        return user.processModel();
+        return user.process();
     }
 
     @Transactional

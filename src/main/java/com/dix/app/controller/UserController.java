@@ -26,7 +26,7 @@ public class UserController {
     public Map getUserByMapper() {
         try {
             User user = userService.findById(2L);
-            return user.processModel();
+            return user.process();
 
         } catch (Exception exception) {
             return null;
@@ -37,7 +37,7 @@ public class UserController {
     public Map getUserDetailByPhone() {
         try {
             User user = userService.findByPhone("13164403207");
-            return user.processModel();
+            return user.process();
 
         } catch (Exception exception) {
             return null;

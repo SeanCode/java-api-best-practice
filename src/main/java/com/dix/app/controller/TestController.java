@@ -205,7 +205,7 @@ public class TestController {
 //                .fetch();
 //
 //        logger.info("result {}", result);
-//        Map<String, Object> user = Core.processModel(result.intoMaps().get(0), User.class);
+//        Map<String, Object> user = Core.process(result.intoMaps().get(0), User.class);
 //        logger.info("map {}", user);
 
 
@@ -248,7 +248,7 @@ public class TestController {
         token.fetch();
 
         return DataResponse.create()
-                .put("token", token)
+                .put("token", token.process())
                 ;
     }
 

@@ -1,6 +1,5 @@
 package com.dix.base.model;
 
-import com.dix.app.model.User;
 import com.dix.base.common.Util;
 import com.dix.base.core.Core;
 import com.dix.base.exception.BaseException;
@@ -21,6 +20,14 @@ public abstract class BaseModel {
     private static Logger logger = LoggerFactory.getLogger(BaseModel.class);
 
     public abstract Long getId();
+
+    public abstract String[] getAttributes();
+
+    public abstract String[] getBasicAttributes();
+
+    public abstract String[] getDetailAttributes();
+
+
 
     private void invokeSet(Object target, String key, Object value)
     {
@@ -109,7 +116,7 @@ public abstract class BaseModel {
 
         BaseMapper baseMapper = Core.getBean(model.mapper());
 
-        Long id = 0L;
+        Long id;
         if (this.getId() == null || this.getId() == 0L) {
              id = baseMapper.insert(this);
         }
@@ -152,25 +159,19 @@ public abstract class BaseModel {
         return this.getId() == null || this.getId() == 0;
     }
 
-    public abstract String[] getAttributes();
-
-    public abstract String[] getBasicAttributes();
-
-    public abstract String[] getDetailAttributes();
-
-    public Map<String, Object> processModel() {
-        return this.processModel(this, getBasicAttributes());
+    public Map<String, Object> process() {
+        return this.process(this, getBasicAttributes());
     }
 
-    public Map<String, Object> processModel(String[] keys) {
-        return this.processModel(this, keys);
+    public Map<String, Object> process(String[] keys) {
+        return this.process(this, keys);
     }
 
-    public Map<String, Object> processModel(Object model) {
-        return this.processModel(model, getBasicAttributes());
+    public Map<String, Object> process(Object model) {
+        return this.process(model, getBasicAttributes());
     }
 
-    public Map<String, Object> processModel(Object model, String[] keys) {
+    public Map<String, Object> process(Object model, String[] keys) {
         return Core.processModel(model, keys);
     }
 }

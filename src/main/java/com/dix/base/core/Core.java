@@ -172,7 +172,7 @@ public class Core {
 
             if (methodName == null)
             {
-                methodName = "processModel";
+                methodName = "process";
             }
 
             if (methodArgs == null)

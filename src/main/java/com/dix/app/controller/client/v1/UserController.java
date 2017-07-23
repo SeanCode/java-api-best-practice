@@ -43,7 +43,7 @@ public class UserController {
         Token token = tokenService.generateTokenForUser(user);
 
         return DataResponse.create()
-                .put("user", user.processModel())
+                .put("user", user.process())
                 .put("token", token.getToken());
     }
 
@@ -69,6 +69,6 @@ public class UserController {
         }
         User user = userService.checkUserById(userId);
         return DataResponse.create()
-                .put("user", user.processModel());
+                .put("user", user.process());
     }
 }
