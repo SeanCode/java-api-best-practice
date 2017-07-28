@@ -252,5 +252,24 @@ public class TestController {
                 ;
     }
 
+    @RequestMapping("/parse-id-string")
+    public DataResponse parseIdString() {
+        return DataResponse.create()
+                .put("list", Util.parseIdString("1,2,3,4,5,6,7,8,9,10"))
+                ;
+    }
+
+    @RequestMapping("/count")
+    public DataResponse count() {
+
+        SelectQuery<Record> query = Core.Q().createQuery(User.class);
+        query.addConditions(field("id").greaterOrEqual(0));
+        int count = Core.Q().count(query);
+
+        return DataResponse.create()
+                .put("count", count)
+                ;
+    }
+
 
 }

@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by dd on 9/8/15.
@@ -190,6 +191,16 @@ public class Util {
                 .omitEmptyStrings()
                 .split(idString));
         return Joiner.on(",").join(idStringSet);
+    }
+
+    public static List<Long> parseIdString(String idString) {
+        return Lists.newArrayList(Splitter.on(',')
+                .trimResults()
+                .omitEmptyStrings()
+                .split(idString))
+                .stream()
+                .map(Util::parseLong)
+                .collect(Collectors.toList());
     }
 
 

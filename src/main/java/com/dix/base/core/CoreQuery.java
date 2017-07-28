@@ -9,8 +9,10 @@ import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.jooq.impl.DSL.*;
 
@@ -116,6 +118,46 @@ public class CoreQuery {
         List<Map<String, Object>> maps = result.intoMaps();
         return maps;
     }
+
+    public int count(SelectQuery<Record> query) {
+        DSLContext dsl = getDSLContext();
+        return dsl.fetchCount(query);
+    }
+
+    public <T> T queryOne(Class<T> c, SelectQuery<Record> query) {
+        Map<String, Object> map = queryOne(query);
+        return objectMapper.convertValue(map, c);
+    }
+
+    public Map<String, Object> queryOne(SelectQuery<Record> query) {
+        List<Map<String, Object>> maps = executeQuery(query);
+        if (maps.size() == 0)
+        {
+            return null;
+        }
+
+        return maps.get(0);
+    }
+
+    public List<Map<String, Object>> queryAll(SelectQuery<Record> query) {
+        return executeQuery(query);
+    }
+
+    public <T> List<T> queryAll(Class<T> c, SelectQuery<Record> query) {
+        List<Map<String, Object>> maps = executeQuery(query);
+        return maps.stream().map(m -> objectMapper.convertValue(m, c)).collect(Collectors.toList());
+    }
+
+    public Object queryCol(SelectQuery<Record> query, String colName) {
+        Map<String, Object> map = queryOne(query);
+        if (map.containsKey(colName)) {
+            return map.get(colName);
+        }
+
+        return null;
+    }
+
+
 
 
 
