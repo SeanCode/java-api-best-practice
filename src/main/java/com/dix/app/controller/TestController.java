@@ -7,6 +7,7 @@ import com.dix.app.service.UserService;
 import com.dix.base.core.Core;
 import com.dix.base.exception.BaseException;
 import com.dix.base.redis.Redis;
+import com.fasterxml.jackson.core.type.TypeReference;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -30,7 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -55,6 +58,23 @@ public class TestController {
     @RequestMapping("/transaction")
     public DataResponse transaction() {
         // userService.testTransaction();
+        return DataResponse.create();
+    }
+
+    @RequestMapping("/json")
+    public DataResponse json() {
+        // userService.testTransaction();
+
+        List<User> userList = new ArrayList<>();
+        userList.add(new User());
+        userList.add(new User());
+
+        String json = "[{\"id\":null,\"uid\":null,\"username\":\"\",\"phone\":\"\",\"password\":\"\",\"email\":\"\",\"name\":\"\",\"tel\":\"\",\"gender\":0,\"birthday\":0,\"avatar\":\"\",\"source_id\":0,\"source_type\":0,\"source_client\":0,\"weight\":0,\"create_time\":null,\"update_time\":null},{\"id\":null,\"uid\":null,\"username\":\"\",\"phone\":\"\",\"password\":\"\",\"email\":\"\",\"name\":\"\",\"tel\":\"\",\"gender\":0,\"birthday\":0,\"avatar\":\"\",\"source_id\":0,\"source_type\":0,\"source_client\":0,\"weight\":0,\"create_time\":null,\"update_time\":null}]";
+
+        logger.info("json encode: {}", Util.jsonEncode(userList));
+        Object o = Util.jsonDecode(json, new TypeReference<List<User>>(){});
+        logger.info("json decode: {}", o);
+
         return DataResponse.create();
     }
 

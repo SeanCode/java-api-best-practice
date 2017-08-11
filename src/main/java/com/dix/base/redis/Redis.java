@@ -111,7 +111,7 @@ public class Redis {
         }
     }
 
-    public <T> T get(String key, RedisGetMethodInterface redisGetMethodInterface, Type type, int expireSeconds)
+    public <T> T get(String key, RedisGetMethodInterface redisGetMethodInterface, Class<T> type, int expireSeconds)
     {
         try (Jedis jedis = getClient()) {
             String data = jedis.get(key);

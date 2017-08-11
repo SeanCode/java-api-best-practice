@@ -62,7 +62,8 @@ public class CoreQuery {
 
         Result<Record> result = dsl.select()
                 .from(getTableName(c))
-                .where(field(colName).eq(colValue))
+                .where(field(colName).eq(colValue)
+                        .and(field("weight").greaterOrEqual(0)))
                 .fetch();
 
         List<Map<String, Object>> maps = result.intoMaps();

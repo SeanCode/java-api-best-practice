@@ -1,5 +1,10 @@
 package com.dix.base.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -205,14 +210,89 @@ public class Util {
 
 
 
-    private static Gson gson = new Gson();
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String jsonEncode(Object object)
+    {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            logger.error("json encode error: {}, source: \n{}", e.getMessage(), object);
+        }
+
+        return "";
+    }
+
+    public static <T> T jsonDecode(String jsonString, Class<T> type)
+    {
+        if (jsonString == null) return null;
+
+
+        T object = null;
+        try
+        {
+            object = objectMapper.readValue(jsonString, type);
+        }
+        catch (Exception e)
+        {
+            logger.error("json decode error: {}, source: \n{}", e.getMessage(), jsonString);
+        }
+
+        return object;
+    }
+
+    public static <T> T jsonDecode(String jsonString, TypeReference typeReference)
+    {
+        if (jsonString == null) return null;
+
+
+        T object = null;
+        try
+        {
+            object = objectMapper.readValue(jsonString, typeReference);
+        }
+        catch (Exception e)
+        {
+            logger.error("json decode error: {}, source: \n{}", e.getMessage(), jsonString);
+        }
+
+        return object;
+    }
+
+    public static <T> T jsonDecode(String jsonString, JavaType javaType)
+    {
+        if (jsonString == null) return null;
+
+
+        T object = null;
+        try
+        {
+            object = objectMapper.readValue(jsonString, javaType);
+        }
+        catch (Exception e)
+        {
+            logger.error("json decode error: {}, source: \n{}", e.getMessage(), jsonString);
+        }
+
+        return object;
+    }
+
+
+
+
+
+
+
+
+    private static final Gson gson = new Gson();
+
+    public static String gsonEncode(Object object)
     {
         return gson.toJson(object);
     }
 
-    public static <T> T jsonDecode(String jsonString, Type type)
+    public static <T> T gsonDecode(String jsonString, Type type)
     {
         if (jsonString == null) return null;
 
@@ -223,7 +303,7 @@ public class Util {
         }
         catch (Exception e)
         {
-            logger.error("json decode error: {}, source: \n{}", e.getMessage(), jsonString);
+            logger.error("gson decode error: {}, source: \n{}", e.getMessage(), jsonString);
         }
 
         return object;
