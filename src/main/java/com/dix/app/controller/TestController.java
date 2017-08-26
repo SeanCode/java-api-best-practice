@@ -2,9 +2,12 @@ package com.dix.app.controller;
 
 import com.dix.app.model.Token;
 import com.dix.app.model.User;
+import com.dix.app.task.ExecutorTask;
+import com.dix.app.task.executor.TestExecutor;
 import com.dix.base.common.*;
 import com.dix.app.service.UserService;
 import com.dix.base.core.Core;
+import com.dix.base.core.CoreTask;
 import com.dix.base.exception.BaseException;
 import com.dix.base.redis.Redis;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -288,6 +291,18 @@ public class TestController {
 
         return DataResponse.create()
                 .put("count", count)
+                ;
+    }
+
+    @RequestMapping("/task/submit")
+    public DataResponse submitTask() {
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", "dd");
+        String  taskId = CoreTask.submit(TestExecutor.class, map);
+
+        return DataResponse.create()
+                .put("task_id", taskId)
                 ;
     }
 

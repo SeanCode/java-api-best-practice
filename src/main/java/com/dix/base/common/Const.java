@@ -24,4 +24,16 @@ public class Const
         return String.format("%s.invitation.token.lock.%s", REDIS_KEY_PREFIX, token);
     }
 
+    public static String getKeyOfTodayTaskCount() {
+        return String.format("%s.task.count.%s", REDIS_KEY_PREFIX, Util.timeFormat(Util.time(), "yyyyMMdd"));
+    }
+
+    public static String getKeyOfTaskId(String taskId) {
+        return String.format("%s.task.%s", REDIS_KEY_PREFIX, taskId);
+    }
+
+    public static String getKeyOfPendingExecuteTaskIdList() {
+        return String.format("%s.task.id.list.pending.execute", REDIS_KEY_PREFIX);
+    }
+
 }
