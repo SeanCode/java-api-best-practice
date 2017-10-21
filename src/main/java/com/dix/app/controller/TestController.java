@@ -26,8 +26,6 @@ import org.jooq.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,14 +43,12 @@ public class TestController {
 
     private static Logger logger = LoggerFactory.getLogger(TestController.class);
 
-    private final RedisTemplate<String, String> template;
     private final UserService userService;
     private final Configuration configuration;
     private final Redis redis;
 
     @Autowired
-    public TestController(@Qualifier("RedisTemplate") RedisTemplate<String, String> template, UserService userService, Configuration configuration, Redis redis) {
-        this.template = template;
+    public TestController(UserService userService, Configuration configuration, Redis redis) {
         this.userService = userService;
         this.configuration = configuration;
         this.redis = redis;

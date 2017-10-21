@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+       Copyright 2015-2016 the original author or authors.
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dix.app.mapper.UserBindMapper">
+
+    <resultMap id="UserBindResultMap" type="UserBind">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="outer_user_id" jdbcType="VARCHAR" property="outerUserId" />
+        <result column="weight" jdbcType="INTEGER" property="weight" />
+        <result column="create_time" jdbcType="BIGINT" property="createTime" />
+        <result column="update_time" jdbcType="BIGINT" property="updateTime" />
+    </resultMap>
+
+    <select id="existsBindByUser" resultMap="UserBindResultMap">
+        select * from user_bind where type = #{type} and user_id = #{user_id} and weight >= 0 limit 0, 1
+    </select>
+
+    <select id="existsBindByOuterUser" resultMap="UserBindResultMap">
+        select * from user_bind where type = #{type} and outer_user_id = #{outer_user_id} and weight >= 0 limit 0, 1
+    </select>
+
+    <update id="deleteUserBindOfType">
+        update user_bind set weight = -1 where type = #{type} and user_id = #{user_id} and weight >= 0
+    </update>
+
+    <insert id="insert" parameterType="UserBind" useGeneratedKeys="true" keyProperty="id">
+        insert into user_bind (type, user_id,
+        outer_user_id, weight, create_time,
+        update_time, data)
+        values (#{type,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT},
+        #{outerUserId,jdbcType=VARCHAR}, #{weight,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT},
+        #{updateTime,jdbcType=BIGINT}, #{data,jdbcType=LONGVARCHAR})
+    </insert>
+
+    <update id="update" parameterType="UserBind">
+        update user_bind
+        <set>
+            <if test="type != null">type = #{type},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="outerUserId != null">outer_user_id = #{outerUserId},</if>
+            <if test="data != null">data = #{data},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime} </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getUserBindList" resultType="map">
+        select * from user_bind where user_id = #{user_id} and weight >= 0
+    </select>
+
+</mapper>

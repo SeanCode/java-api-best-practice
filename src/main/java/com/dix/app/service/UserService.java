@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -37,17 +36,14 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final UserBindMapper userBindMapper;
-    private final RedisTemplate<String, String> redisTemplate;
     private final Redis redis;
 
     @Autowired
     public UserService(UserBindMapper userBindMapper,
-                       @Qualifier("RedisTemplate") RedisTemplate<String, String> redisTemplate,
                        UserMapper userMapper,
                        @Qualifier("Redis") Redis redis
     ) {
         this.userBindMapper = userBindMapper;
-        this.redisTemplate = redisTemplate;
         this.userMapper = userMapper;
         this.redis = redis;
     }

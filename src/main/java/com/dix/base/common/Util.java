@@ -10,6 +10,9 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.InvalidJsonException;
+import com.jayway.jsonpath.JsonPathException;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailConstants;
 import org.apache.commons.mail.EmailException;
@@ -344,6 +347,32 @@ public class Util {
         maxLines = maxLines > traceList.size() ? traceList.size() : maxLines;
         return Joiner.on("\n    ").join(traceList.subList(0, maxLines));
     }
+
+    public static <T> T readValue(DocumentContext documentContext, String key, Class<T> type) {
+        try {
+            T v = documentContext.read(key);
+            if (!v.getClass().equals(type)) {
+                logger.info("type mismatch: {} {}", v.getClass(), type);
+                return null;
+            }
+            return v;
+        } catch (Exception e) {
+            logger.warn("{}", e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static <T> T readValue(DocumentContext documentContext, String key, Class<T> type, T defaultValue) {
+        T v = readValue(documentContext, key, type);
+        if (v == null) {
+            v = defaultValue;
+        }
+        return v;
+    }
+
+
+
 
 
 

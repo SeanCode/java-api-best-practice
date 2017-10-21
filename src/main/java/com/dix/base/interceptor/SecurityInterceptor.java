@@ -48,7 +48,7 @@ public class SecurityInterceptor implements HandlerInterceptor
     private String getRequiredParam(HttpServletRequest httpServletRequest, String key) throws ParamNotSetException {
         if (!httpServletRequest.getParameterMap().containsKey(key))
         {
-            throw new ParamNotSetException(key);
+            throw new ParamNotSetException(key + " not set");
         }
 
         return httpServletRequest.getParameter(key);

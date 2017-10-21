@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+// for CoreTask
 public class TestExecutor {
     private static final Logger logger = LoggerFactory.getLogger(TestExecutor.class);
 
