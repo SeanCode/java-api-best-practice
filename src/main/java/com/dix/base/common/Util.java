@@ -10,14 +10,18 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.InvalidJsonException;
-import com.jayway.jsonpath.JsonPathException;
+import com.jayway.jsonpath.*;
+import com.jayway.jsonpath.spi.json.GsonJsonProvider;
+import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
+import com.jayway.jsonpath.spi.json.JsonProvider;
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+import com.jayway.jsonpath.spi.mapper.MappingProvider;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailConstants;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.slf4j.Logger;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -33,6 +37,29 @@ import java.util.stream.Collectors;
  */
 public class Util {
     private static Logger logger = org.slf4j.LoggerFactory.getLogger(Util.class);
+
+    public static void init() {
+        com.jayway.jsonpath.Configuration.setDefaults(new com.jayway.jsonpath.Configuration.Defaults() {
+
+            private final JsonProvider jsonProvider = new JacksonJsonProvider();
+            private final MappingProvider mappingProvider = new JacksonMappingProvider();
+
+            @Override
+            public JsonProvider jsonProvider() {
+                return jsonProvider;
+            }
+
+            @Override
+            public MappingProvider mappingProvider() {
+                return mappingProvider;
+            }
+
+            @Override
+            public Set<Option> options() {
+                return EnumSet.noneOf(Option.class);
+            }
+        });
+    }
 
     public static Long time()
     {
@@ -363,6 +390,21 @@ public class Util {
         return null;
     }
 
+    public static <T> T readValue(DocumentContext documentContext, String key, TypeRef<T> typeRef) {
+        try {
+            T v = documentContext.read(key, typeRef);
+            if (!v.getClass().equals(typeRef.getType())) {
+                logger.warn("type mismatch: {} {}", v.getClass(), typeRef.getType());
+                return null;
+            }
+            return v;
+        } catch (Exception e) {
+            logger.warn("{}", e.getMessage());
+        }
+
+        return null;
+    }
+
     public static <T> T readValue(DocumentContext documentContext, String key, Class<T> type, T defaultValue) {
         T v = readValue(documentContext, key, type);
         if (v == null) {
@@ -371,6 +413,13 @@ public class Util {
         return v;
     }
 
+    public static <T> T readValue(DocumentContext documentContext, String key, TypeRef<T> typeRef, T defaultValue) {
+        T v = readValue(documentContext, key, typeRef);
+        if (v == null) {
+            v = defaultValue;
+        }
+        return v;
+    }
 
 
 
