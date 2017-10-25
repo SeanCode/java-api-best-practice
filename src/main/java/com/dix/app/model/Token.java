@@ -34,7 +34,7 @@ public class Token extends BaseModel {
     }
 
     @JsonProperty("id")
-    public Long getId() {
+    public Long ID() {
         return id;
     }
 

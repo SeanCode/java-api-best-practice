@@ -224,7 +224,7 @@ public class UserService {
         user = registerUserWithUid(user);
 
         UserBind userBind = new UserBind();
-        userBind.setUserId(user.getId());
+        userBind.setUserId(user.ID());
         userBind.setType(type);
         userBind.setOuterUserId(outerUserId);
         userBind.setWeight(Const.WEIGHT_NORMAL);
@@ -240,7 +240,7 @@ public class UserService {
             throw new WrongParamException("type");
         }
 
-        UserBind userBind = userBindMapper.existsBindByUser(UserBind.TYPE_WEXIN, user.getId());
+        UserBind userBind = userBindMapper.existsBindByUser(UserBind.TYPE_WEXIN, user.ID());
 
         if (userBind == null) {
             throw new NotExistsException("user bind not exist");
@@ -266,7 +266,7 @@ public class UserService {
     }
 
     public List getUserBindList(User user) throws NotExistsException {
-        List<Map> userBinds = userBindMapper.getUserBindList(user.getId());
+        List<Map> userBinds = userBindMapper.getUserBindList(user.ID());
         return Core.processModelList(userBinds, UserBind.class);
     }
 
@@ -297,14 +297,14 @@ public class UserService {
 
         UserBind userBind = userBindMapper.existsBindByOuterUser(type, outerUserId);
         if (userBind != null) {
-            if (!userBind.getUserId().equals(user.getId())) {
+            if (!userBind.getUserId().equals(user.ID())) {
                 throw new BindOuterUserFailOuterUserHasBeenBindToOtherUserException();
             } else {
                 return;
             }
         }
 
-        userBind = userBindMapper.existsBindByUser(type, user.getId());
+        userBind = userBindMapper.existsBindByUser(type, user.ID());
         if (userBind != null) {
             if (!userBind.getOuterUserId().equals(outerUserId)) {
                 throw new BindOuterUserFailUserHasBeenBondByOtherOuterUserException();
@@ -315,7 +315,7 @@ public class UserService {
         }
 
         userBind = new UserBind();
-        userBind.setUserId(user.getId());
+        userBind.setUserId(user.ID());
         userBind.setType(type);
         userBind.setOuterUserId(outerUserId);
         userBind.setData(data);
@@ -330,7 +330,7 @@ public class UserService {
             throw new WrongParamException("type");
         }
 
-        userBindMapper.deleteUserBindOfType(type, user.getId());
+        userBindMapper.deleteUserBindOfType(type, user.ID());
     }
 
     public void updateBasicInfo(User user, String name, String email, String tel, Integer gender, Long birthday) {

@@ -19,12 +19,15 @@ public abstract class BaseModel {
 
     private static Logger logger = LoggerFactory.getLogger(BaseModel.class);
 
-    public abstract Long getId();
+    public abstract Long ID();
 
+    @JsonIgnore
     public abstract String[] getAttributes();
 
+    @JsonIgnore
     public abstract String[] getBasicAttributes();
 
+    @JsonIgnore
     public abstract String[] getDetailAttributes();
 
 
@@ -117,7 +120,7 @@ public abstract class BaseModel {
         BaseMapper baseMapper = Core.getBean(model.mapper());
 
         Long id;
-        if (this.getId() == null || this.getId() == 0L) {
+        if (this.isNew()) {
              id = baseMapper.insert(this);
         }
         else
@@ -132,12 +135,12 @@ public abstract class BaseModel {
 
     public void updateCol(String colName, Object colValue)
     {
-        Core.Q().updateCol(this.getClass(), getId(), colName, colValue);
+        Core.Q().updateCol(this.getClass(), this.ID(), colName, colValue);
     }
 
     public void fetch()
     {
-        Object latestModel = Core.Q().findById(this.getClass(), getId());
+        Object latestModel = Core.Q().findById(this.getClass(), this.ID());
 
         String[] keys = getAttributes();
         for (String key : keys)
@@ -156,7 +159,7 @@ public abstract class BaseModel {
     @JsonIgnore
     public boolean isNew()
     {
-        return this.getId() == null || this.getId() == 0;
+        return this.ID() == null || this.ID() == 0;
     }
 
     public Map<String, Object> process() {

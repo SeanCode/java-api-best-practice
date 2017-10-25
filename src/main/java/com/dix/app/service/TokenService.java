@@ -43,7 +43,7 @@ public class TokenService {
         Token token = new Token();
         token.setToken(Token.makeToken());
         token.setStatus(Token.STATUS_VALID);
-        token.setUserId(user.getId());
+        token.setUserId(user.ID());
 
         Long time = Util.time();
         token.setExpireTime(0L);

@@ -102,7 +102,7 @@ publishing {
 
             groupId 'com.dix.base'
             artifactId 'core'
-            version '0.0.52'
+            version '0.0.53'
 
             artifact publishBaseJar
 

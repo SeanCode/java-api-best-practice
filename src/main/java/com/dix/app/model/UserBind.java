@@ -22,7 +22,7 @@ public class UserBind extends BaseModel {
     private Long updateTime;
 
     @JsonProperty("id")
-    public Long getId() {
+    public Long ID() {
         return id;
     }
 
