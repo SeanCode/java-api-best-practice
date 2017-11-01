@@ -61,7 +61,7 @@ public class CoreQuery {
         DSLContext dsl = getDSLContext();
 
         Result<Record> result = dsl.select()
-                .from(getTableName(c))
+                .from(name(getTableName(c)))
                 .where(field(colName).eq(colValue)
                         .and(field("weight").greaterOrEqual(0)))
                 .fetch();
@@ -90,7 +90,7 @@ public class CoreQuery {
 
         logger.info("update col: {} -> {}, id: {}", colName, colValue, id);
 
-        dsl.update(table(getTableName(c)))
+        dsl.update(table(name(getTableName(c))))
                 .set(field(colName), colValue)
                 .where(field("id").eq(id))
                 .execute();
@@ -98,7 +98,7 @@ public class CoreQuery {
 
     public <T> SelectQuery<Record> createQuery(Class<T> c) {
         DSLContext dsl = getDSLContext();
-        return dsl.select().from(getTableName(c)).getQuery();
+        return dsl.select().from(name(getTableName(c))).getQuery();
     }
 
     public <T> SelectQuery<Record> createQueryByPage(Class<T> c, int limit, int offset) {

@@ -377,12 +377,7 @@ public class Util {
 
     public static <T> T readValue(DocumentContext documentContext, String key, Class<T> type) {
         try {
-            T v = documentContext.read(key);
-            if (!v.getClass().equals(type)) {
-                logger.info("type mismatch: {} {}", v.getClass(), type);
-                return null;
-            }
-            return v;
+            return documentContext.read(key);
         } catch (Exception e) {
             logger.warn("{}", e.getMessage());
         }
@@ -392,12 +387,7 @@ public class Util {
 
     public static <T> T readValue(DocumentContext documentContext, String key, TypeRef<T> typeRef) {
         try {
-            T v = documentContext.read(key, typeRef);
-            if (!v.getClass().equals(typeRef.getType())) {
-                logger.warn("type mismatch: {} {}", v.getClass(), typeRef.getType());
-                return null;
-            }
-            return v;
+            return documentContext.read(key, typeRef);
         } catch (Exception e) {
             logger.warn("{}", e.getMessage());
         }
